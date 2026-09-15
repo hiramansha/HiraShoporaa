@@ -1,0 +1,477 @@
+/* ==========================================
+   SHOPORA - CHECKOUT PAGE
+========================================== */
+
+.checkout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 55px 25px 80px;
+}
+
+/* ==========================================
+   PAGE TITLE
+========================================== */
+
+.checkout-container h1 {
+    color: #29232B;
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin: 0 0 38px;
+}
+
+.checkout-container h1::after {
+    content: "";
+    display: block;
+    width: 55px;
+    height: 4px;
+    background: #D97898;
+    border-radius: 10px;
+    margin-top: 12px;
+}
+
+
+/* ==========================================
+   CHECKOUT LAYOUT
+========================================== */
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1.45fr 0.85fr;
+    gap: 30px;
+    align-items: start;
+}
+
+
+/* ==========================================
+   CARDS
+========================================== */
+
+.checkout-form-section,
+.order-summary-section {
+    background: #FFFFFF;
+    border: 1px solid #F0DCE3;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(185, 86, 120, 0.10);
+}
+
+.order-summary-section {
+    position: sticky;
+    top: 100px;
+}
+
+
+/* ==========================================
+   SECTION HEADINGS
+========================================== */
+
+.checkout-form-section h2,
+.order-summary-section h2 {
+    margin: 0 0 25px;
+    color: #2563EB; /* Blue */
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.checkout-form-section h2 {
+    padding-bottom: 17px;
+    border-bottom: 1px solid #F0DCE3;
+}
+/* ==========================================
+   FORM
+========================================== */
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4D454C;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 14px 15px;
+
+    background: #FFF9FB;
+    color: #29232B;
+
+    border: 1px solid #F0DCE3;
+    border-radius: 11px;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    outline: none;
+    transition: 0.25s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #A59DA2;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    background: #FFFFFF;
+    border-color: #D97898;
+    box-shadow: 0 0 0 4px rgba(217, 120, 152, 0.10);
+}
+
+.form-group textarea {
+    min-height: 105px;
+    resize: vertical;
+}
+
+
+/* ========================================== 
+   PLACE ORDER BUTTON 
+========================================== */ 
+ 
+.place-order-btn { 
+    width: 100%; 
+    padding: 16px; 
+ 
+    margin-top: 8px; 
+ 
+    border: none; 
+    border-radius: 12px; 
+ 
+    background: #3B82F6; 
+    color: #FFFFFF; 
+ 
+    font-size: 16px; 
+    font-weight: 700; 
+ 
+    cursor: pointer; 
+    transition: 0.25s ease; 
+} 
+ 
+.place-order-btn:hover { 
+    background: #2563EB; 
+    transform: translateY(-2px); 
+    box-shadow: 0 12px 25px rgba(59, 130, 246, 0.25); 
+}
+/* ==========================================
+   PRODUCTS IN CHECKOUT
+========================================== */
+
+#checkoutItems {
+    margin-bottom: 18px;
+}
+
+.checkout-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #F0DCE3;
+}
+
+.checkout-item:first-child {
+    padding-top: 0;
+}
+
+
+/* PRODUCT IMAGE */
+
+.checkout-item-image {
+    width: 78px;
+    height: 78px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    border-radius: 13px;
+    border: 1px solid #F0DCE3;
+
+    background: #FFF0F4;
+}
+
+.checkout-item-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* PRODUCT INFO */
+
+.checkout-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.checkout-item-info h3 {
+    margin: 0 0 6px;
+
+    color: #29232B;
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.checkout-item-info p {
+    margin: 0 0 6px;
+
+    color: #756D73;
+
+    font-size: 13px;
+}
+
+.checkout-item-info strong {
+    color: #B95678;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+
+/* ==========================================
+   SUMMARY
+========================================== */
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 13px 0;
+
+    color: #756D73;
+    font-size: 15px;
+}
+
+.summary-row span:last-child {
+    color: #29232B;
+    font-weight: 700;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 10px;
+    padding-top: 20px;
+
+    border-top: 1px solid #F0DCE3;
+
+    color: #29232B;
+
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.summary-total span:last-child {
+    color: #B95678;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+
+    .checkout-container {
+        padding: 35px 16px 60px;
+    }
+
+    .checkout-container h1 {
+        font-size: 32px;
+    }
+
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-form-section,
+    .order-summary-section {
+        padding: 22px;
+        border-radius: 16px;
+    }
+
+    .order-summary-section {
+        position: static;
+    }
+
+    .checkout-item-image {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+/* ==========================================
+   CHECKOUT HEADER - SHOPORA
+========================================== */
+
+.checkout-container {
+    padding-top: 45px;
+}
+
+/* SHOPORA LOGO */
+
+.header .logo a {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #29232B;
+    text-decoration: none;
+}
+
+
+/* NAVIGATION */
+
+.header nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header nav a {
+    font-size: 17px;
+    font-weight: 700;
+    color: #4D454C;
+    text-decoration: none;
+    padding: 11px 16px;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+
+.header nav a:hover {
+    color: #B95678;
+    background: #FFF0F4;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .header .logo a {
+        font-size: 24px;
+    }
+
+    .header nav {
+        gap: 4px;
+    }
+
+    .header nav a {
+        font-size: 15px;
+        padding: 9px 10px;
+    }
+}
+
+/* ==========================================
+   SHOPORA - PREMIUM CHECKOUT HEADER
+========================================== */
+
+.header {
+    height: 82px;
+    padding: 0 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border-bottom: 1px solid #f0dce3;
+    box-shadow: 0 5px 25px rgba(185, 86, 120, 0.08);
+}
+
+/* SHOPORA LOGO */
+.header .logo a {
+    color: #29232B;
+    text-decoration: none;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    transition: 0.3s ease;
+}
+
+.header .logo a:hover {
+    color: #D97898;
+}
+
+/* NAVIGATION */
+.header nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header nav a {
+    position: relative;
+    color: #4D454C;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 12px 18px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+/* HOVER */
+.header nav a:hover {
+    color: #B95678;
+    background: #FFF0F4;
+    transform: translateY(-2px);
+}
+
+/* ACTIVE / CURRENT LOOK */
+.header nav a::after {
+    content: "";
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 5px;
+    height: 2px;
+    background: #D97898;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+}
+
+.header nav a:hover::after {
+    transform: scaleX(1);
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+
+    .header {
+        height: auto;
+        padding: 18px 20px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .header .logo a {
+        font-size: 27px;
+    }
+
+    .header nav {
+        gap: 4px;
+    }
+
+    .header nav a {
+        font-size: 15px;
+        padding: 9px 11px;
+    }
+}
