@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SHOPORA | Manage Orders</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7fa;
+            color: #30262d;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================== */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #f0dce3;
+            padding: 25px 18px;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: #29232b;
+            margin-bottom: 40px;
+        }
+
+        .logo span {
+            color: #d97898;
+        }
+
+        .admin-label {
+            font-size: 12px;
+            color: #9b8d94;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-left: 12px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-decoration: none;
+            color: #665b62;
+            padding: 13px 14px;
+            border-radius: 12px;
+            margin-bottom: 7px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #fff0f4;
+            color: #b95678;
+        }
+
+        .sidebar-icon {
+            font-size: 19px;
+            width: 25px;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+            background: #fff0f4;
+            color: #b95678 !important;
+        }
+
+        /* =========================
+           MAIN
+        ========================== */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .title-area h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .title-area p {
+            color: #81757c;
+            font-size: 14px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 1px solid #f0dce3;
+        }
+
+        .admin-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #d97898,
+                #b95678
+            );
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .admin-profile small {
+            color: #8b7d84;
+            display: block;
+            font-size: 11px;
+        }
+
+        .admin-profile strong {
+            font-size: 14px;
+        }
+
+        /* =========================
+           SUMMARY
+        ========================== */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #f0dce3;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(185, 86, 120, 0.06);
+        }
+
+        .summary-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-card small {
+            color: #8b7d84;
+            font-size: 12px;
+        }
+
+        .summary-card h2 {
+            margin-top: 6px;
+            font-size: 25px;
+        }
+
+        .summary-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            background: #fff0f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 21px;
+        }
+
+        .summary-card:nth-child(2) .summary-icon {
+            background: #fff6e8;
+        }
+
+        .summary-card:nth-child(3) .summary-icon {
+            background: #f1edff;
+        }
+
+        .summary-card:nth-child(4) .summary-icon {
+            background: #eef9f3;
+        }
+
+        /* =========================
+           TOOLBAR
+        ========================== */
+
+        .toolbar {
+            background: white;
+            border: 1px solid #f0dce3;
+            border-radius: 18px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 13px 15px 13px 43px;
+            border: 1px solid #ead7de;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            border-color: #d97898;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+        }
+
+        .filter-select {
+            padding: 13px 15px;
+            border: 1px solid #ead7de;
+            border-radius: 12px;
+            background: white;
+            outline: none;
+            color: #665b62;
+            cursor: pointer;
+        }
+
+        /* =========================
+           ORDERS PANEL
+        ========================== */
+
+        .orders-panel {
+            background: white;
+            border: 1px solid #f0dce3;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(185, 86, 120, 0.06);
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-heading h2 {
+            font-size: 20px;
+        }
+
+        .panel-heading span {
+            color: #8b7d84;
+            font-size: 13px;
+        }
+
+        /* =========================
+           ORDER CARD
+        ========================== */
+
+        .order-card {
+            border: 1px solid #f0dce3;
+            border-radius: 17px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #fffafb;
+            transition: 0.3s;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 10px 25px rgba(185, 86, 120, 0.08);
+        }
+
+        .order-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f3e5e9;
+            margin-bottom: 16px;
+        }
+
+        .order-id {
+            color: #b95678;
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .order-date {
+            color: #8d8188;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .status-select {
+            border: none;
+            padding: 7px 11px;
+            border-radius: 20px;
+            background: #fff0f4;
+            color: #b95678;
+            font-size: 11px;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .status-select.processing {
+            background: #fff6e8;
+            color: #a47427;
+        }
+
+        .status-select.shipped {
+            background: #f1edff;
+            color: #6958a7;
+        }
+
+        .status-select.delivered {
+            background: #eef9f3;
+            color: #4c8c62;
+        }
+
+        .order-info {
+            display: grid;
+            grid-template-columns: 1.2fr 1.2fr 1fr 1fr;
+            gap: 18px;
+        }
+
+        .info-item small {
+            display: block;
+            color: #9a8e94;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .info-item strong {
+            font-size: 13px;
+        }
+
+        .info-item p {
+            color: #665b62;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .order-items {
+            margin-top: 18px;
+            padding-top: 17px;
+            border-top: 1px solid #f3e5e9;
+        }
+
+        .items-title {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 12px;
+        }
+
+        .item-name {
+            font-weight: 600;
+        }
+
+        .item-quantity {
+            color: #8d8188;
+            margin-left: 8px;
+        }
+
+        .item-price {
+            color: #b95678;
+            font-weight: 700;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            padding-top: 17px;
+            border-top: 1px solid #f3e5e9;
+        }
+
+        .payment {
+            color: #766a71;
+            font-size: 12px;
+        }
+
+        .payment strong {
+            color: #30262d;
+        }
+
+        .total {
+            text-align: right;
+        }
+
+        .total small {
+            color: #8d8188;
+            display: block;
+            font-size: 11px;
+        }
+
+        .total strong {
+            color: #b95678;
+            font-size: 19px;
+        }
+
+        /* =========================
+           EMPTY
+        ========================== */
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8b7d84;
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            margin-bottom: 14px;
+        }
+
+        .empty h3 {
+            color: #443a40;
+            margin-bottom: 7px;
+        }
+
+        .empty p {
+            font-size: 13px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 1100px) {
+
+            .summary {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .order-info {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 10px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .admin-label,
+            .sidebar a span:not(.sidebar-icon) {
+                display: none;
+            }
+
+            .sidebar a {
+                justify-content: center;
+                padding: 14px 8px;
+            }
+
+            .logout {
+                left: 10px;
+                right: 10px;
+            }
+
+            .main {
+                margin-left: 70px;
+                padding: 20px 15px;
+            }
+
+            .title-area h1 {
+                font-size: 23px;
+            }
+
+            .admin-profile {
+                padding: 7px;
+            }
+
+            .admin-profile div:not(.admin-avatar) {
+                display: none;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .order-header {
+                gap: 12px;
+                flex-direction: column;
+            }
+
+            .order-info {
+                grid-template-columns: 1fr;
+            }
+
+            .order-footer {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .total {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            SHOP<span>ORA</span>
+        </div>
+
+        <div class="admin-label">
+            Admin Panel
+        </div>
+
+        <a href="dashboard.html">
+            <span class="sidebar-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="products.html">
+            <span class="sidebar-icon">🛍️</span>
+            <span>Products</span>
+        </a>
+
+        <a href="orders.html" class="active">
+            <span class="sidebar-icon">📦</span>
+            <span>Orders</span>
+        </a>
+
+        <a href="users.html">
+            <span class="sidebar-icon">👥</span>
+            <span>Users</span>
+        </a>
+
+        <a href="../index.html">
+            <span class="sidebar-icon">🌐</span>
+            <span>Visit Store</span>
+        </a>
+
+        <a href="#" class="logout" onclick="adminLogout()">
+            <span class="sidebar-icon">🚪</span>
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div class="title-area">
+                <h1>Orders 📦</h1>
+
+                <p>
+                    Manage and track all SHOPORA customer orders.
+                </p>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>SHOPORA Admin</strong>
+                    <small>Administrator</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             SUMMARY
+        ========================== -->
+
+        <section class="summary">
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div>
+                        <small>Total Orders</small>
+                        <h2 id="total-orders">0</h2>
+                    </div>
+
+                    <div class="summary-icon">
+                        📦
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div>
+                        <small>Pending Orders</small>
+                        <h2 id="pending-orders">0</h2>
+                    </div>
+
+                    <div class="summary-icon">
+                        ⏳
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div>
+                        <small>Shipped Orders</small>
+                        <h2 id="shipped-orders">0</h2>
+                    </div>
+
+                    <div class="summary-icon">
+                        🚚
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <div>
+                        <small>Delivered</small>
+                        <h2 id="delivered-orders">0</h2>
+                    </div>
+
+                    <div class="summary-icon">
+                        ✅
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TOOLBAR
+        ========================== -->
+
+        <div class="toolbar">
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔍
+                </span>
+
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search by order ID or customer name..."
+                    oninput="displayOrders()"
+                >
+
+            </div>
+
+
+            <select
+                class="filter-select"
+                id="status-filter"
+                onchange="displayOrders()"
+            >
+
+                <option value="all">
+                    All Status
+                </option>
+
+                <option value="Order Placed">
+                    Order Placed
+                </option>
+
+                <option value="Processing">
+                    Processing
+                </option>
+
+                <option value="Shipped">
+                    Shipped
+                </option>
+
+                <option value="Delivered">
+                    Delivered
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- =========================
+             ORDERS
+        ========================== -->
+
+        <section class="orders-panel">
+
+            <div class="panel-heading">
+
+                <h2>All Orders</h2>
+
+                <span id="order-count">
+                    0 orders
+                </span>
+
+            </div>
+
+            <div id="orders-container"></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        /* =========================
+           ADMIN LOGIN CHECK
+        ========================== */
+
+        const adminLoggedIn =
+            localStorage.getItem(
+                "shoporaAdminLoggedIn"
+            );
+
+        if (adminLoggedIn !== "true") {
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+
+
+        /* =========================
+           LOAD ORDERS
+        ========================== */
+
+        let orders =
+            JSON.parse(
+                localStorage.getItem("orders")
+            ) || [];
+
+
+        /* =========================
+           DISPLAY ORDERS
+        ========================== */
+
+        function displayOrders() {
+
+            const container =
+                document.getElementById(
+                    "orders-container"
+                );
+
+            const search =
+                document.getElementById(
+                    "search-input"
+                ).value
+                    .toLowerCase()
+                    .trim();
+
+            const statusFilter =
+                document.getElementById(
+                    "status-filter"
+                ).value;
+
+
+            const filteredOrders =
+                orders.filter(
+                    function (order) {
+
+                        const customerName =
+                            order.customer &&
+                            order.customer.name
+                                ? order.customer.name
+                                    .toLowerCase()
+                                : "";
+
+                        const orderId =
+                            String(
+                                order.orderId || ""
+                            ).toLowerCase();
+
+                        const matchesSearch =
+                            orderId.includes(search) ||
+                            customerName.includes(search);
+
+                        const matchesStatus =
+                            statusFilter === "all" ||
+                            (
+                                order.status ||
+                                "Order Placed"
+                            ) === statusFilter;
+
+                        return (
+                            matchesSearch &&
+                            matchesStatus
+                        );
+
+                    }
+                );
+
+
+            document.getElementById(
+                "order-count"
+            ).textContent =
+                filteredOrders.length +
+                " order" +
+                (
+                    filteredOrders.length !== 1
+                        ? "s"
+                        : ""
+                );
+
+
+            if (filteredOrders.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            📦
+                        </div>
+
+                        <h3>
+                            No Orders Found
+                        </h3>
+
+                        <p>
+                            Customer orders will appear here
+                            after checkout.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            container.innerHTML =
+                [...filteredOrders]
+                    .reverse()
+                    .map(
+                        function (order) {
+
+                            return createOrderCard(
+                                order
+                            );
+
+                        }
+                    )
+                    .join("");
+
+        }
+
+
+        /* =========================
+           ORDER CARD
+        ========================== */
+
+        function createOrderCard(order) {
+
+            const customer =
+                order.customer || {};
+
+            const customerName =
+                customer.name ||
+                "Unknown Customer";
+
+            const email =
+                customer.email ||
+                "No email";
+
+            const phone =
+                customer.phone ||
+                "No phone";
+
+            const address =
+                customer.address ||
+                "No address";
+
+            const city =
+                customer.city ||
+                "";
+
+            const status =
+                order.status ||
+                "Order Placed";
+
+            const items =
+                order.items || [];
+
+            const total =
+                Number(order.total) || 0;
+
+            const payment =
+                order.paymentMethod ||
+                "Not specified";
+
+
+            let statusClass = "";
+
+            if (status === "Processing") {
+                statusClass = "processing";
+            }
+
+            if (status === "Shipped") {
+                statusClass = "shipped";
+            }
+
+            if (status === "Delivered") {
+                statusClass = "delivered";
+            }
+
+
+            const itemsHTML =
+                items.length > 0
+
+                    ? items.map(
+                        function (item) {
+
+                            const itemName =
+                                item.name ||
+                                "Product";
+
+                            const quantity =
+                                Number(
+                                    item.quantity
+                                ) || 1;
+
+                            const price =
+                                Number(
+                                    item.price
+                                ) || 0;
+
+                            return `
+
+                                <div class="item-row">
+
+                                    <div>
+                                        <span class="item-name">
+                                            ${itemName}
+                                        </span>
+
+                                        <span class="item-quantity">
+                                            × ${quantity}
+                                        </span>
+                                    </div>
+
+                                    <div class="item-price">
+                                        Rs ${(
+                                            price *
+                                            quantity
+                                        ).toLocaleString()}
+                                    </div>
+
+                                </div>
+
+                            `;
+
+                        }
+                    ).join("")
+
+                    : `
+                        <div class="item-row">
+                            <span class="item-name">
+                                Order Items
+                            </span>
+                        </div>
+                    `;
+
+
+            return `
+
+                <div class="order-card">
+
+                    <div class="order-header">
+
+                        <div>
+
+                            <div class="order-id">
+                                #${order.orderId || "N/A"}
+                            </div>
+
+                            <div class="order-date">
+                                ${order.date || "Date unavailable"}
+                            </div>
+
+                        </div>
+
+
+                        <select
+                            class="
+                                status-select
+                                ${statusClass}
+                            "
+                            onchange="
+                                updateOrderStatus(
+                                    '${escapeQuotes(order.orderId || "")}',
+                                    this.value
+                                )
+                            "
+                        >
+
+                            <option
+                                value="Order Placed"
+                                ${status === "Order Placed" ? "selected" : ""}
+                            >
+                                Order Placed
+                            </option>
+
+                            <option
+                                value="Processing"
+                                ${status === "Processing" ? "selected" : ""}
+                            >
+                                Processing
+                            </option>
+
+                            <option
+                                value="Shipped"
+                                ${status === "Shipped" ? "selected" : ""}
+                            >
+                                Shipped
+                            </option>
+
+                            <option
+                                value="Delivered"
+                                ${status === "Delivered" ? "selected" : ""}
+                            >
+                                Delivered
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="order-info">
+
+                        <div class="info-item">
+
+                            <small>
+                                Customer
+                            </small>
+
+                            <strong>
+                                ${customerName}
+                            </strong>
+
+                            <p>
+                                ${email}
+                            </p>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <small>
+                                Contact
+                            </small>
+
+                            <strong>
+                                ${phone}
+                            </strong>
+
+                            <p>
+                                ${address}
+                            </p>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <small>
+                                Location
+                            </small>
+
+                            <strong>
+                                ${city || "Not specified"}
+                            </strong>
+
+                            <p>
+                                Shipping Address
+                            </p>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <small>
+                                Payment
+                            </small>
+
+                            <strong>
+                                ${payment}
+                            </strong>
+
+                            <p>
+                                Payment Method
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="order-items">
+
+                        <div class="items-title">
+                            ORDER ITEMS
+                        </div>
+
+                        ${itemsHTML}
+
+                    </div>
+
+
+                    <div class="order-footer">
+
+                        <div class="payment">
+                            Payment:
+                            <strong>
+                                ${payment}
+                            </strong>
+                        </div>
+
+                        <div class="total">
+
+                            <small>
+                                Order Total
+                            </small>
+
+                            <strong>
+                                Rs ${total.toLocaleString()}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* =========================
+           UPDATE STATUS
+        ========================== */
+
+        function updateOrderStatus(
+            orderId,
+            newStatus
+        ) {
+
+            const order =
+                orders.find(
+                    function (item) {
+
+                        return String(
+                            item.orderId
+                        ) === String(orderId);
+
+                    }
+                );
+
+
+            if (!order) return;
+
+
+            order.status =
+                newStatus;
+
+
+            localStorage.setItem(
+                "orders",
+                JSON.stringify(orders)
+            );
+
+
+            updateSummary();
+
+            displayOrders();
+
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================== */
+
+        function updateSummary() {
+
+            const total =
+                orders.length;
+
+
+            const pending =
+                orders.filter(
+                    function (order) {
+
+                        return (
+                            !order.status ||
+                            order.status ===
+                                "Order Placed" ||
+                            order.status ===
+                                "Processing"
+                        );
+
+                    }
+                ).length;
+
+
+            const shipped =
+                orders.filter(
+                    function (order) {
+
+                        return order.status ===
+                            "Shipped";
+
+                    }
+                ).length;
+
+
+            const delivered =
+                orders.filter(
+                    function (order) {
+
+                        return order.status ===
+                            "Delivered";
+
+                    }
+                ).length;
+
+
+            document.getElementById(
+                "total-orders"
+            ).textContent =
+                total;
+
+
+            document.getElementById(
+                "pending-orders"
+            ).textContent =
+                pending;
+
+
+            document.getElementById(
+                "shipped-orders"
+            ).textContent =
+                shipped;
+
+
+            document.getElementById(
+                "delivered-orders"
+            ).textContent =
+                delivered;
+
+        }
+
+
+        /* =========================
+           ESCAPE QUOTES
+        ========================== */
+
+        function escapeQuotes(value) {
+
+            return String(value)
+                .replace(/\\/g, "\\\\")
+                .replace(/'/g, "\\'");
+
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================== */
+
+        function adminLogout() {
+
+            localStorage.removeItem(
+                "shoporaAdminLoggedIn"
+            );
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+
+
+        /* =========================
+           INITIAL LOAD
+        ========================== */
+
+        updateSummary();
+
+        displayOrders();
+
+    </script>
+
+</body>
+</html>

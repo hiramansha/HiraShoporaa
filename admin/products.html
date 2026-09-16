@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SHOPORA | Manage Products</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7fa;
+            color: #30262d;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================== */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #f0dce3;
+            padding: 25px 18px;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: #29232b;
+            margin-bottom: 40px;
+        }
+
+        .logo span {
+            color: #d97898;
+        }
+
+        .admin-label {
+            font-size: 12px;
+            color: #9b8d94;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-left: 12px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-decoration: none;
+            color: #665b62;
+            padding: 13px 14px;
+            border-radius: 12px;
+            margin-bottom: 7px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #fff0f4;
+            color: #b95678;
+        }
+
+        .sidebar-icon {
+            font-size: 19px;
+            width: 25px;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+            background: #fff0f4;
+            color: #b95678 !important;
+        }
+
+        /* =========================
+           MAIN
+        ========================== */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .title-area h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .title-area p {
+            color: #81757c;
+            font-size: 14px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 1px solid #f0dce3;
+        }
+
+        .admin-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #d97898,
+                #b95678
+            );
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .admin-profile small {
+            color: #8b7d84;
+            display: block;
+            font-size: 11px;
+        }
+
+        .admin-profile strong {
+            font-size: 14px;
+        }
+
+        /* =========================
+           SUMMARY CARDS
+        ========================== */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #f0dce3;
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 25px rgba(185, 86, 120, 0.06);
+        }
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #fff0f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .summary-card:nth-child(2) .summary-icon {
+            background: #eef9f3;
+        }
+
+        .summary-card:nth-child(3) .summary-icon {
+            background: #fff6e8;
+        }
+
+        .summary-card small {
+            color: #8b7d84;
+            font-size: 12px;
+        }
+
+        .summary-card h2 {
+            margin-top: 4px;
+            font-size: 24px;
+        }
+
+        /* =========================
+           TOOLBAR
+        ========================== */
+
+        .toolbar {
+            background: white;
+            border: 1px solid #f0dce3;
+            border-radius: 18px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 13px 16px 13px 43px;
+            border: 1px solid #ead7de;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            border-color: #d97898;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+        }
+
+        .add-btn {
+            border: none;
+            background: linear-gradient(
+                135deg,
+                #d97898,
+                #b95678
+            );
+            color: white;
+            padding: 13px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(185, 86, 120, 0.2);
+        }
+
+        /* =========================
+           PRODUCTS
+        ========================== */
+
+        .products-panel {
+            background: white;
+            border: 1px solid #f0dce3;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(185, 86, 120, 0.06);
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-heading h2 {
+            font-size: 20px;
+        }
+
+        .panel-heading span {
+            color: #8b7d84;
+            font-size: 13px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .product-card {
+            border: 1px solid #f0dce3;
+            border-radius: 17px;
+            overflow: hidden;
+            background: #fffafb;
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(185, 86, 120, 0.1);
+        }
+
+        .product-image {
+            height: 180px;
+            background: linear-gradient(
+                135deg,
+                #fff0f4,
+                #f7e7ed
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+        }
+
+        .product-info {
+            padding: 17px;
+        }
+
+        .category {
+            display: inline-block;
+            padding: 5px 9px;
+            background: #fff0f4;
+            color: #b95678;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .product-info h3 {
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        .product-description {
+            color: #8a7d84;
+            font-size: 12px;
+            line-height: 1.5;
+            min-height: 36px;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .price {
+            color: #b95678;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .stock {
+            color: #5b926c;
+            font-size: 11px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .action-btn {
+            flex: 1;
+            border: none;
+            padding: 9px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .edit-btn {
+            background: #f1edff;
+            color: #6756a3;
+        }
+
+        .delete-btn {
+            background: #fff0f2;
+            color: #c45d75;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================== */
+
+        .empty {
+            text-align: center;
+            padding: 55px 20px;
+            color: #8b7d84;
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 12px;
+        }
+
+        .empty h3 {
+            color: #443a40;
+            margin-bottom: 7px;
+        }
+
+        /* =========================
+           MODAL
+        ========================== */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(41, 35, 43, 0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 500;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 560px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 22px;
+            padding: 27px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.18);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+        }
+
+        .close-btn {
+            border: none;
+            background: #fff0f4;
+            color: #b95678;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #ead7de;
+            border-radius: 10px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #d97898;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px;
+        }
+
+        .save-btn {
+            width: 100%;
+            border: none;
+            background: linear-gradient(
+                135deg,
+                #d97898,
+                #b95678
+            );
+            color: white;
+            padding: 13px;
+            border-radius: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 1050px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .summary {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 20px 10px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .admin-label,
+            .sidebar a span:not(.sidebar-icon) {
+                display: none;
+            }
+
+            .sidebar a {
+                justify-content: center;
+                padding: 14px 8px;
+            }
+
+            .logout {
+                left: 10px;
+                right: 10px;
+            }
+
+            .main {
+                margin-left: 70px;
+                padding: 20px 15px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .title-area h1 {
+                font-size: 23px;
+            }
+
+            .admin-profile {
+                padding: 7px;
+            }
+
+            .admin-profile div:not(.admin-avatar) {
+                display: none;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .products-panel {
+                padding: 17px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            SHOP<span>ORA</span>
+        </div>
+
+        <div class="admin-label">
+            Admin Panel
+        </div>
+
+        <a href="dashboard.html">
+            <span class="sidebar-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="products.html" class="active">
+            <span class="sidebar-icon">🛍️</span>
+            <span>Products</span>
+        </a>
+
+        <a href="orders.html">
+            <span class="sidebar-icon">📦</span>
+            <span>Orders</span>
+        </a>
+
+        <a href="users.html">
+            <span class="sidebar-icon">👥</span>
+            <span>Users</span>
+        </a>
+
+        <a href="../index.html">
+            <span class="sidebar-icon">🌐</span>
+            <span>Visit Store</span>
+        </a>
+
+        <a href="#" class="logout" onclick="adminLogout()">
+            <span class="sidebar-icon">🚪</span>
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div class="title-area">
+                <h1>Products 🛍️</h1>
+
+                <p>
+                    Manage your SHOPORA products,
+                    prices and stock.
+                </p>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>SHOPORA Admin</strong>
+                    <small>Administrator</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             SUMMARY
+        ========================== -->
+
+        <section class="summary">
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    🛍️
+                </div>
+
+                <div>
+                    <small>Total Products</small>
+                    <h2 id="total-products">0</h2>
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    📦
+                </div>
+
+                <div>
+                    <small>Available Stock</small>
+                    <h2 id="total-stock">0</h2>
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    💰
+                </div>
+
+                <div>
+                    <small>Product Value</small>
+                    <h2 id="product-value">Rs 0</h2>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TOOLBAR
+        ========================== -->
+
+        <div class="toolbar">
+
+            <div class="search-box">
+
+                <span class="search-icon">🔍</span>
+
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search products..."
+                    oninput="displayProducts()"
+                >
+
+            </div>
+
+            <button
+                class="add-btn"
+                onclick="openAddModal()"
+            >
+                + Add Product
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             PRODUCT PANEL
+        ========================== -->
+
+        <section class="products-panel">
+
+            <div class="panel-heading">
+
+                <h2>All Products</h2>
+
+                <span id="product-count">
+                    0 products
+                </span>
+
+            </div>
+
+            <div
+                class="product-grid"
+                id="product-grid"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         ADD / EDIT MODAL
+    ========================== -->
+
+    <div class="modal" id="product-modal">
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+
+                <h2 id="modal-title">
+                    Add Product
+                </h2>
+
+                <button
+                    class="close-btn"
+                    onclick="closeModal()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="product-form">
+
+                <div class="form-group">
+
+                    <label>
+                        Product Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="product-name"
+                        placeholder="Enter product name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>
+                            Category
+                        </label>
+
+                        <select id="product-category" required>
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option value="Fashion">
+                                Fashion
+                            </option>
+
+                            <option value="Electronics">
+                                Electronics
+                            </option>
+
+                            <option value="Beauty">
+                                Beauty
+                            </option>
+
+                            <option value="Home">
+                                Home
+                            </option>
+
+                            <option value="Accessories">
+                                Accessories
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Price (Rs)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="product-price"
+                            min="0"
+                            placeholder="2500"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>
+                            Stock
+                        </label>
+
+                        <input
+                            type="number"
+                            id="product-stock"
+                            min="0"
+                            placeholder="20"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Emoji / Icon
+                        </label>
+
+                        <input
+                            type="text"
+                            id="product-icon"
+                            placeholder="🛍️"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        id="product-description"
+                        placeholder="Write a short product description..."
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    Save Product
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        /* =========================
+           ADMIN LOGIN CHECK
+        ========================== */
+
+        const adminLoggedIn =
+            localStorage.getItem(
+                "shoporaAdminLoggedIn"
+            );
+
+        if (adminLoggedIn !== "true") {
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+
+
+        /* =========================
+           PRODUCT STORAGE
+        ========================== */
+
+        const PRODUCT_KEY =
+            "shoporaProducts";
+
+
+        let products =
+            JSON.parse(
+                localStorage.getItem(
+                    PRODUCT_KEY
+                )
+            ) || [];
+
+
+        let editingIndex = -1;
+
+
+        /* =========================
+           DISPLAY PRODUCTS
+        ========================== */
+
+        function displayProducts() {
+
+            const grid =
+                document.getElementById(
+                    "product-grid"
+                );
+
+            const searchInput =
+                document.getElementById(
+                    "search-input"
+                );
+
+            const search =
+                searchInput
+                    ? searchInput.value
+                        .toLowerCase()
+                    : "";
+
+            const filteredProducts =
+                products.filter(
+                    function (product) {
+
+                        const name =
+                            String(
+                                product.name || ""
+                            ).toLowerCase();
+
+                        const category =
+                            String(
+                                product.category || ""
+                            ).toLowerCase();
+
+                        return (
+                            name.includes(search) ||
+                            category.includes(search)
+                        );
+
+                    }
+                );
+
+
+            document.getElementById(
+                "product-count"
+            ).textContent =
+                filteredProducts.length +
+                " product" +
+                (
+                    filteredProducts.length !== 1
+                        ? "s"
+                        : ""
+                );
+
+
+            if (filteredProducts.length === 0) {
+
+                grid.innerHTML = `
+
+                    <div class="empty"
+                         style="grid-column:1/-1;">
+
+                        <div class="empty-icon">
+                            🛍️
+                        </div>
+
+                        <h3>
+                            No Products Found
+                        </h3>
+
+                        <p>
+                            Add your first product
+                            to SHOPORA.
+                        </p>
+
+                    </div>
+
+                `;
+
+                updateSummary();
+
+                return;
+            }
+
+
+            grid.innerHTML =
+                filteredProducts.map(
+                    function (product) {
+
+                        const originalIndex =
+                            products.indexOf(product);
+
+                        const name =
+                            product.name ||
+                            "Unnamed Product";
+
+                        const category =
+                            product.category ||
+                            "General";
+
+                        const price =
+                            Number(
+                                product.price
+                            ) || 0;
+
+                        const stock =
+                            Number(
+                                product.stock
+                            ) || 0;
+
+                        const icon =
+                            product.icon ||
+                            "🛍️";
+
+                        const description =
+                            product.description ||
+                            "Quality product from SHOPORA.";
+
+
+                        return `
+
+                            <div class="product-card">
+
+                                <div class="product-image">
+                                    ${icon}
+                                </div>
+
+                                <div class="product-info">
+
+                                    <span class="category">
+                                        ${category}
+                                    </span>
+
+                                    <h3>
+                                        ${name}
+                                    </h3>
+
+                                    <p class="product-description">
+                                        ${description}
+                                    </p>
+
+                                    <div class="product-bottom">
+
+                                        <div class="price">
+                                            Rs ${price.toLocaleString()}
+                                        </div>
+
+                                        <div class="stock">
+                                            ${stock} in stock
+                                        </div>
+
+                                    </div>
+
+                                    <div class="actions">
+
+                                        <button
+                                            class="action-btn edit-btn"
+                                            onclick="editProduct(${originalIndex})"
+                                        >
+                                            ✏️ Edit
+                                        </button>
+
+                                        <button
+                                            class="action-btn delete-btn"
+                                            onclick="deleteProduct(${originalIndex})"
+                                        >
+                                            🗑️ Delete
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+                ).join("");
+
+
+            updateSummary();
+
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================== */
+
+        function updateSummary() {
+
+            const totalProducts =
+                products.length;
+
+            const totalStock =
+                products.reduce(
+                    function (sum, product) {
+
+                        return sum +
+                            (
+                                Number(
+                                    product.stock
+                                ) || 0
+                            );
+
+                    },
+                    0
+                );
+
+
+            const productValue =
+                products.reduce(
+                    function (sum, product) {
+
+                        const price =
+                            Number(
+                                product.price
+                            ) || 0;
+
+                        const stock =
+                            Number(
+                                product.stock
+                            ) || 0;
+
+                        return sum +
+                            (price * stock);
+
+                    },
+                    0
+                );
+
+
+            document.getElementById(
+                "total-products"
+            ).textContent =
+                totalProducts;
+
+
+            document.getElementById(
+                "total-stock"
+            ).textContent =
+                totalStock;
+
+
+            document.getElementById(
+                "product-value"
+            ).textContent =
+                "Rs " +
+                productValue.toLocaleString();
+
+        }
+
+
+        /* =========================
+           OPEN ADD MODAL
+        ========================== */
+
+        function openAddModal() {
+
+            editingIndex = -1;
+
+            document.getElementById(
+                "modal-title"
+            ).textContent =
+                "Add Product";
+
+            document.getElementById(
+                "product-form"
+            ).reset();
+
+            document.getElementById(
+                "product-modal"
+            ).classList.add("show");
+
+        }
+
+
+        /* =========================
+           EDIT PRODUCT
+        ========================== */
+
+        function editProduct(index) {
+
+            const product =
+                products[index];
+
+            if (!product) return;
+
+            editingIndex = index;
+
+
+            document.getElementById(
+                "modal-title"
+            ).textContent =
+                "Edit Product";
+
+
+            document.getElementById(
+                "product-name"
+            ).value =
+                product.name || "";
+
+
+            document.getElementById(
+                "product-category"
+            ).value =
+                product.category || "";
+
+
+            document.getElementById(
+                "product-price"
+            ).value =
+                product.price || "";
+
+
+            document.getElementById(
+                "product-stock"
+            ).value =
+                product.stock || "";
+
+
+            document.getElementById(
+                "product-icon"
+            ).value =
+                product.icon || "";
+
+
+            document.getElementById(
+                "product-description"
+            ).value =
+                product.description || "";
+
+
+            document.getElementById(
+                "product-modal"
+            ).classList.add("show");
+
+        }
+
+
+        /* =========================
+           SAVE PRODUCT
+        ========================== */
+
+        document.getElementById(
+            "product-form"
+        ).addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+
+                const product = {
+
+                    name:
+                        document.getElementById(
+                            "product-name"
+                        ).value.trim(),
+
+                    category:
+                        document.getElementById(
+                            "product-category"
+                        ).value,
+
+                    price:
+                        Number(
+                            document.getElementById(
+                                "product-price"
+                            ).value
+                        ),
+
+                    stock:
+                        Number(
+                            document.getElementById(
+                                "product-stock"
+                            ).value
+                        ),
+
+                    icon:
+                        document.getElementById(
+                            "product-icon"
+                        ).value.trim() ||
+                        "🛍️",
+
+                    description:
+                        document.getElementById(
+                            "product-description"
+                        ).value.trim()
+
+                };
+
+
+                if (editingIndex === -1) {
+
+                    products.push(product);
+
+                } else {
+
+                    products[editingIndex] =
+                        product;
+
+                }
+
+
+                saveProducts();
+
+                closeModal();
+
+                displayProducts();
+
+            }
+        );
+
+
+        /* =========================
+           SAVE TO LOCAL STORAGE
+        ========================== */
+
+        function saveProducts() {
+
+            localStorage.setItem(
+                PRODUCT_KEY,
+                JSON.stringify(products)
+            );
+
+        }
+
+
+        /* =========================
+           DELETE PRODUCT
+        ========================== */
+
+        function deleteProduct(index) {
+
+            const product =
+                products[index];
+
+            if (!product) return;
+
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to delete " +
+                    product.name +
+                    "?"
+                );
+
+
+            if (!confirmed) return;
+
+
+            products.splice(
+                index,
+                1
+            );
+
+
+            saveProducts();
+
+            displayProducts();
+
+        }
+
+
+        /* =========================
+           CLOSE MODAL
+        ========================== */
+
+        function closeModal() {
+
+            document.getElementById(
+                "product-modal"
+            ).classList.remove("show");
+
+        }
+
+
+        /* =========================
+           CLICK OUTSIDE MODAL
+        ========================== */
+
+        document.getElementById(
+            "product-modal"
+        ).addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target ===
+                    this
+                ) {
+                    closeModal();
+                }
+
+            }
+        );
+
+
+        /* =========================
+           LOGOUT
+        ========================== */
+
+        function adminLogout() {
+
+            localStorage.removeItem(
+                "shoporaAdminLoggedIn"
+            );
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+
+
+        /* =========================
+           INITIAL LOAD
+        ========================== */
+
+        displayProducts();
+
+    </script>
+
+</body>
+</html>
