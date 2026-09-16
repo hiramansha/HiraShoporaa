@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | SHOPORA</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #fff9fb;
+        }
+
+        .admin-login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-login-page::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: #fff0f4;
+            top: -170px;
+            right: -120px;
+        }
+
+        .admin-login-page::after {
+            content: "";
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: #f5dce5;
+            bottom: -150px;
+            left: -120px;
+        }
+
+        .admin-login-card {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border: 1px solid #f0dce3;
+            border-radius: 28px;
+            padding: 42px;
+            box-shadow: 0 25px 70px rgba(185, 86, 120, 0.13);
+            position: relative;
+            z-index: 2;
+        }
+
+        .admin-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-logo a {
+            text-decoration: none;
+            font-size: 30px;
+            font-weight: 800;
+            color: #29232b;
+        }
+
+        .admin-logo span {
+            color: #d97898;
+        }
+
+        .admin-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            border-radius: 22px;
+            background: #fff0f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+        }
+
+        .admin-heading {
+            text-align: center;
+        }
+
+        .admin-heading h1 {
+            margin: 0 0 8px;
+            color: #29232b;
+            font-size: 28px;
+        }
+
+        .admin-heading p {
+            margin: 0 0 30px;
+            color: #756d73;
+            font-size: 14px;
+        }
+
+        .admin-form-group {
+            margin-bottom: 20px;
+        }
+
+        .admin-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #29232b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .admin-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 16px;
+            border: 1px solid #f0dce3;
+            border-radius: 12px;
+            outline: none;
+            background: #fff9fb;
+            color: #29232b;
+            font-size: 14px;
+            transition: 0.3s ease;
+        }
+
+        .admin-input:focus {
+            border-color: #d97898;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(217, 120, 152, 0.10);
+        }
+
+        .admin-login-btn {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            background: #d97898;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .admin-login-btn:hover {
+            background: #b95678;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(185, 86, 120, 0.20);
+        }
+
+        .login-message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 13px;
+            min-height: 18px;
+        }
+
+        .back-store {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #b95678;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .back-store:hover {
+            text-decoration: underline;
+        }
+
+        .admin-note {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #f0dce3;
+            color: #756d73;
+            font-size: 11px;
+        }
+
+        @media (max-width: 500px) {
+
+            .admin-login-card {
+                padding: 30px 22px;
+                border-radius: 22px;
+            }
+
+            .admin-heading h1 {
+                font-size: 24px;
+            }
+
+            .admin-icon {
+                width: 65px;
+                height: 65px;
+                font-size: 29px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <main class="admin-login-page">
+
+        <div class="admin-login-card">
+
+            <div class="admin-logo">
+
+                <div class="admin-icon">
+                    🔐
+                </div>
+
+                <a href="../index.html">
+                    SHOP<span>ORA</span>
+                </a>
+
+            </div>
+
+
+            <div class="admin-heading">
+
+                <h1>Admin Login</h1>
+
+                <p>
+                    Sign in to access the SHOPORA admin panel.
+                </p>
+
+            </div>
+
+
+            <form id="admin-login-form">
+
+                <div class="admin-form-group">
+
+                    <label for="admin-email">
+                        Admin Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="admin-email"
+                        class="admin-input"
+                        placeholder="Enter admin email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+                    <label for="admin-password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="admin-password"
+                        class="admin-input"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="admin-login-btn"
+                >
+                    Login to Admin Panel
+                </button>
+
+                <div
+                    id="login-message"
+                    class="login-message"
+                ></div>
+
+            </form>
+
+
+            <a
+                href="../index.html"
+                class="back-store"
+            >
+                ← Back to SHOPORA Store
+            </a>
+
+
+            <div class="admin-note">
+                SHOPORA Administration Panel
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        document
+            .getElementById("admin-login-form")
+            .addEventListener("submit", function (event) {
+
+                event.preventDefault();
+
+                const email =
+                    document.getElementById("admin-email").value.trim();
+
+                const password =
+                    document.getElementById("admin-password").value.trim();
+
+                const message =
+                    document.getElementById("login-message");
+
+
+                /*
+                    Temporary admin login
+                    We will connect this properly
+                    with the Admin Panel later.
+                */
+
+                if (
+                    email === "admin@shopora.com" &&
+                    password === "admin123"
+                ) {
+
+                    localStorage.setItem(
+                        "shoporaAdminLoggedIn",
+                        "true"
+                    );
+
+                    message.textContent =
+                        "Login successful!";
+
+                    message.style.color =
+                        "#2e8b57";
+
+
+                    setTimeout(function () {
+
+                        window.location.href =
+                            "dashboard.html";
+
+                    }, 700);
+
+                } else {
+
+                    message.textContent =
+                        "Invalid admin email or password.";
+
+                    message.style.color =
+                        "#b95678";
+
+                }
+
+            });
+
+    </script>
+
+</body>
+
+</html>
