@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SHOPORA | Admin Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7fa;
+            color: #30262d;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #f0dce3;
+            padding: 25px 18px;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: #29232b;
+            margin-bottom: 40px;
+        }
+
+        .logo span {
+            color: #d97898;
+        }
+
+        .admin-label {
+            font-size: 12px;
+            color: #9b8d94;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-left: 12px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-decoration: none;
+            color: #665b62;
+            padding: 13px 14px;
+            border-radius: 12px;
+            margin-bottom: 7px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #fff0f4;
+            color: #b95678;
+        }
+
+        .sidebar-icon {
+            font-size: 19px;
+            width: 25px;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+            background: #fff0f4;
+            color: #b95678 !important;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: #81757c;
+            font-size: 14px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 1px solid #f0dce3;
+        }
+
+        .admin-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #d97898,
+                #b95678
+            );
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .admin-profile small {
+            color: #8b7d84;
+            display: block;
+            font-size: 11px;
+        }
+
+        .admin-profile strong {
+            font-size: 14px;
+        }
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #f0dce3;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 12px 30px rgba(185, 86, 120, 0.07);
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 35px rgba(185, 86, 120, 0.12);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            background: #fff0f4;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: #f5f0ff;
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: #eef9f3;
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: #fff6e8;
+        }
+
+        .stat-title {
+            color: #83777e;
+            font-size: 13px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .stat-change {
+            color: #5c9b72;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        /* =========================
+           CONTENT GRID
+        ========================= */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 22px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #f0dce3;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 12px 30px rgba(185, 86, 120, 0.06);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .panel-header h2 {
+            font-size: 19px;
+        }
+
+        .view-all {
+            color: #b95678;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* =========================
+           ORDERS
+        ========================= */
+
+        .order-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1.5fr 1fr 1fr;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f5e9ed;
+        }
+
+        .order-row:last-child {
+            border-bottom: none;
+        }
+
+        .order-id {
+            font-size: 13px;
+            font-weight: bold;
+            color: #b95678;
+        }
+
+        .customer-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .order-date {
+            color: #93868d;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .order-total {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #fff0f4;
+            color: #b95678;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status.delivered {
+            background: #eef9f3;
+            color: #4c8c62;
+        }
+
+        .status.shipped {
+            background: #f2efff;
+            color: #6958a7;
+        }
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .quick-action {
+            text-decoration: none;
+            color: #30262d;
+            padding: 20px 15px;
+            border: 1px solid #f0dce3;
+            border-radius: 15px;
+            transition: 0.3s;
+            background: #fffafb;
+        }
+
+        .quick-action:hover {
+            border-color: #d97898;
+            transform: translateY(-3px);
+        }
+
+        .quick-action-icon {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .quick-action strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .quick-action span {
+            font-size: 11px;
+            color: #8b7d84;
+        }
+
+        /* =========================
+           SALES SUMMARY
+        ========================= */
+
+        .sales-summary {
+            margin-top: 22px;
+        }
+
+        .sales-box {
+            background: linear-gradient(
+                135deg,
+                #d97898,
+                #b95678
+            );
+            color: white;
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sales-box::after {
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            right: -35px;
+            top: -35px;
+        }
+
+        .sales-box p {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .sales-box h2 {
+            font-size: 31px;
+            margin: 8px 0;
+        }
+
+        .sales-box span {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+            text-align: center;
+            padding: 30px 10px;
+            color: #8c8087;
+            font-size: 13px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 750px) {
+            .sidebar {
+                width: 70px;
+                padding: 20px 10px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .admin-label,
+            .sidebar a span:not(.sidebar-icon) {
+                display: none;
+            }
+
+            .sidebar a {
+                justify-content: center;
+                padding: 14px 8px;
+            }
+
+            .logout {
+                left: 10px;
+                right: 10px;
+            }
+
+            .main {
+                margin-left: 70px;
+                padding: 20px 15px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .welcome h1 {
+                font-size: 23px;
+            }
+
+            .admin-profile {
+                padding: 7px;
+            }
+
+            .admin-profile div:not(.admin-avatar) {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .order-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            SHOP<span>ORA</span>
+        </div>
+
+        <div class="admin-label">
+            Admin Panel
+        </div>
+
+        <a href="dashboard.html" class="active">
+            <span class="sidebar-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="products.html">
+            <span class="sidebar-icon">🛍️</span>
+            <span>Products</span>
+        </a>
+
+        <a href="orders.html">
+            <span class="sidebar-icon">📦</span>
+            <span>Orders</span>
+        </a>
+
+        <a href="users.html">
+            <span class="sidebar-icon">👥</span>
+            <span>Users</span>
+        </a>
+
+        <a href="../index.html">
+            <span class="sidebar-icon">🌐</span>
+            <span>Visit Store</span>
+        </a>
+
+        <a href="#" class="logout" onclick="adminLogout()">
+            <span class="sidebar-icon">🚪</span>
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div class="welcome">
+                <h1>Dashboard 👋</h1>
+                <p>
+                    Welcome back, Admin. Here's what's happening
+                    with SHOPORA today.
+                </p>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>SHOPORA Admin</strong>
+                    <small>Administrator</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <div>
+                        <div class="stat-title">
+                            Total Products
+                        </div>
+
+                        <div class="stat-number"
+                             id="total-products">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        🛍️
+                    </div>
+                </div>
+
+                <div class="stat-change">
+                    ● Store Products
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <div>
+                        <div class="stat-title">
+                            Total Orders
+                        </div>
+
+                        <div class="stat-number"
+                             id="total-orders">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        📦
+                    </div>
+                </div>
+
+                <div class="stat-change">
+                    ● Customer Orders
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <div>
+                        <div class="stat-title">
+                            Total Users
+                        </div>
+
+                        <div class="stat-number"
+                             id="total-users">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+                </div>
+
+                <div class="stat-change">
+                    ● Registered Users
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <div>
+                        <div class="stat-title">
+                            Total Sales
+                        </div>
+
+                        <div class="stat-number"
+                             id="total-sales">
+                            Rs 0
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        💰
+                    </div>
+                </div>
+
+                <div class="stat-change">
+                    ● Order Revenue
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CONTENT
+        ========================== -->
+
+        <section class="content-grid">
+
+            <!-- RECENT ORDERS -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>Recent Orders</h2>
+
+                    <a href="orders.html"
+                       class="view-all">
+                        View All →
+                    </a>
+
+                </div>
+
+                <div id="recent-orders">
+
+                    <div class="empty">
+                        No orders available yet.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT SIDE -->
+
+            <div>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Quick Actions</h2>
+                    </div>
+
+                    <div class="quick-actions">
+
+                        <a href="products.html"
+                           class="quick-action">
+
+                            <div class="quick-action-icon">
+                                ➕
+                            </div>
+
+                            <strong>
+                                Manage Products
+                            </strong>
+
+                            <span>
+                                Add or update products
+                            </span>
+
+                        </a>
+
+
+                        <a href="orders.html"
+                           class="quick-action">
+
+                            <div class="quick-action-icon">
+                                📦
+                            </div>
+
+                            <strong>
+                                Manage Orders
+                            </strong>
+
+                            <span>
+                                View customer orders
+                            </span>
+
+                        </a>
+
+
+                        <a href="users.html"
+                           class="quick-action">
+
+                            <div class="quick-action-icon">
+                                👥
+                            </div>
+
+                            <strong>
+                                Manage Users
+                            </strong>
+
+                            <span>
+                                View registered users
+                            </span>
+
+                        </a>
+
+
+                        <a href="../products.html"
+                           class="quick-action">
+
+                            <div class="quick-action-icon">
+                                🛒
+                            </div>
+
+                            <strong>
+                                View Store
+                            </strong>
+
+                            <span>
+                                Browse SHOPORA
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SALES -->
+
+                <div class="sales-summary">
+
+                    <div class="sales-box">
+
+                        <p>
+                            Total Store Revenue
+                        </p>
+
+                        <h2 id="sales-summary">
+                            Rs 0
+                        </h2>
+
+                        <span>
+                            Based on placed orders
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                /* Admin Login Check */
+
+                const adminLoggedIn =
+                    localStorage.getItem(
+                        "shoporaAdminLoggedIn"
+                    );
+
+                if (adminLoggedIn !== "true") {
+                    window.location.href =
+                        "admin-login.html";
+                    return;
+                }
+
+
+                /* =========================
+                   USERS
+                ========================== */
+
+                const users =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "shoporaUsers"
+                        )
+                    ) || [];
+
+                document.getElementById(
+                    "total-users"
+                ).textContent = users.length;
+
+
+                /* =========================
+                   ORDERS
+                ========================== */
+
+                const orders =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "orders"
+                        )
+                    ) || [];
+
+                document.getElementById(
+                    "total-orders"
+                ).textContent = orders.length;
+
+
+                /* =========================
+                   SALES
+                ========================== */
+
+                const totalSales =
+                    orders.reduce(
+                        function (sum, order) {
+
+                            return sum +
+                                (Number(order.total) || 0);
+
+                        },
+                        0
+                    );
+
+                document.getElementById(
+                    "total-sales"
+                ).textContent =
+                    "Rs " +
+                    totalSales.toLocaleString();
+
+                document.getElementById(
+                    "sales-summary"
+                ).textContent =
+                    "Rs " +
+                    totalSales.toLocaleString();
+
+
+                /* =========================
+                   PRODUCTS
+                ========================= */
+
+                let products = [];
+
+                const possibleKeys = [
+                    "products",
+                    "shoporaProducts",
+                    "shopora_products"
+                ];
+
+                for (
+                    let i = 0;
+                    i < possibleKeys.length;
+                    i++
+                ) {
+
+                    const saved =
+                        localStorage.getItem(
+                            possibleKeys[i]
+                        );
+
+                    if (saved) {
+
+                        try {
+
+                            const parsed =
+                                JSON.parse(saved);
+
+                            if (Array.isArray(parsed)) {
+                                products = parsed;
+                                break;
+                            }
+
+                        } catch (error) {
+                            console.log(
+                                "Product data error"
+                            );
+                        }
+                    }
+                }
+
+                document.getElementById(
+                    "total-products"
+                ).textContent =
+                    products.length;
+
+
+                /* =========================
+                   RECENT ORDERS
+                ========================== */
+
+                const recentOrders =
+                    document.getElementById(
+                        "recent-orders"
+                    );
+
+                if (orders.length === 0) {
+
+                    recentOrders.innerHTML = `
+                        <div class="empty">
+                            No orders have been placed yet.
+                        </div>
+                    `;
+
+                } else {
+
+                    const latestOrders =
+                        [...orders]
+                            .reverse()
+                            .slice(0, 5);
+
+                    recentOrders.innerHTML =
+                        latestOrders.map(
+                            function (order) {
+
+                                const customer =
+                                    order.customer &&
+                                    order.customer.name
+                                        ? order.customer.name
+                                        : "Customer";
+
+                                const status =
+                                    order.status ||
+                                    "Order Placed";
+
+                                const total =
+                                    Number(
+                                        order.total
+                                    ) || 0;
+
+                                let statusClass = "";
+
+                                if (
+                                    status ===
+                                    "Delivered"
+                                ) {
+                                    statusClass =
+                                        "delivered";
+                                }
+
+                                if (
+                                    status ===
+                                    "Shipped"
+                                ) {
+                                    statusClass =
+                                        "shipped";
+                                }
+
+                                return `
+
+                                    <div class="order-row">
+
+                                        <div>
+                                            <div class="order-id">
+                                                #${order.orderId || "N/A"}
+                                            </div>
+
+                                            <div class="order-date">
+                                                ${order.date || ""}
+                                            </div>
+                                        </div>
+
+                                        <div class="customer-name">
+                                            ${customer}
+                                        </div>
+
+                                        <div class="order-total">
+                                            Rs ${total.toLocaleString()}
+                                        </div>
+
+                                        <div>
+                                            <span class="
+                                                status
+                                                ${statusClass}
+                                            ">
+                                                ${status}
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                `;
+
+                            }
+                        ).join("");
+
+                }
+
+            }
+        );
+
+
+        /* =========================
+           ADMIN LOGOUT
+        ========================== */
+
+        function adminLogout() {
+
+            localStorage.removeItem(
+                "shoporaAdminLoggedIn"
+            );
+
+            window.location.href =
+                "admin-login.html";
+        }
+
+    </script>
+
+</body>
+</html>
