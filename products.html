@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shop | SHOPORA</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+    <!-- ================= SHOP PAGE DESIGN ================= -->
+
+    <style>
+
+        /* PAGE HEADER */
+
+        .shop-hero {
+            padding: 90px 6% 75px;
+            background:
+                radial-gradient(circle at 85% 20%, rgba(236, 72, 153, 0.15), transparent 35%),
+                radial-gradient(circle at 15% 80%, rgba(124, 58, 237, 0.12), transparent 35%),
+                #F8F7FC;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shop-hero::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            background: rgba(124, 58, 237, 0.08);
+            border-radius: 50%;
+            top: -100px;
+            left: -80px;
+        }
+        .shop-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 750px;
+            margin: auto;
+        }
+        .shop-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            border-radius: 50px;
+            background: #FFFFFF;
+            color: #7C3AED;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(24, 24, 27, 0.08);
+            margin-bottom: 20px;
+        }
+        .shop-hero h1 {
+            font-size: clamp(38px, 5vw, 62px);
+            line-height: 1.05;
+            color: #18181B;
+            margin-bottom: 18px;
+            letter-spacing: -2px;
+        }
+        .shop-hero h1 span {
+            background: linear-gradient(135deg, #7C3AED, #EC4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        .shop-hero p {
+            color: #71717A;
+            font-size: 17px;
+            max-width: 600px;
+            margin: auto;
+            line-height: 1.7;
+        }
+        /* SHOP SECTION */
+
+        .shop-section {
+            padding-top: 70px;
+        }
+        /* TOOLBAR */
+
+        .shop-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+            padding: 22px;
+            margin-bottom: 35px;
+            background: #FFFFFF;
+            border: 1px solid #E9E7EF;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(24, 24, 27, 0.06);
+        }
+        .toolbar-left h2 {
+            margin: 0 0 6px;
+            font-size: 25px;
+            color: #18181B;
+        }
+        .toolbar-left p {
+            margin: 0;
+            color: #71717A;
+            font-size: 14px;
+        }
+       .shop-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .shop-controls select {
+            min-width: 175px;
+            padding: 13px 16px;
+            border: 1px solid #E9E7EF;
+            border-radius: 12px;
+            background: #FFFFFF;
+            color: #52525B;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        .shop-controls select:hover,
+        .shop-controls select:focus {
+            border-color: #7C3AED;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+        }
+        /* SEARCH AREA */
+
+        .shop-search {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #FFFFFF;
+            border: 1px solid #E9E7EF;
+            border-radius: 14px;
+            padding: 5px 7px 5px 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(24, 24, 27, 0.05);
+        }
+        .shop-search span {
+            font-size: 18px;
+        }
+        .shop-search input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 8px;
+            font-family: inherit;
+            font-size: 15px;
+            color: #18181B;
+            background: transparent;
+        }
+        .shop-search input::placeholder {
+            color: #A1A1AA;
+        }
+        /* PRODUCT CARD ENHANCEMENT */
+
+        #all-products {
+            animation: shopFade 0.5s ease;
+        }
+        @keyframes shopFade {
+
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        /* NO PRODUCTS */
+
+        .no-products {
+            text-align: center;
+            padding: 80px 20px;
+            background: #FFFFFF;
+            border: 1px solid #E9E7EF;
+            border-radius: 22px;
+        }
+        .no-products div {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+        .no-products h3 {
+            font-size: 22px;
+            color: #18181B;
+            margin-bottom: 8px;
+        }
+        .no-products p {
+            color: #71717A;
+        }
+        /* MOBILE */
+
+        @media (max-width: 768px) {
+
+            .shop-hero {
+                padding: 65px 5% 55px;
+            }
+            .shop-hero h1 {
+                letter-spacing: -1px;
+            }
+            .shop-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .shop-controls {
+                width: 100%;
+                flex-direction: column;
+            }
+            .shop-controls select {
+                width: 100%;
+            }
+            .shop-search {
+                margin-top: 5px;
+            }
+
+        }
+        @media (max-width: 480px) {
+
+            .shop-hero h1 {
+                font-size: 36px;
+            }
+
+
+            .shop-hero p {
+                font-size: 15px;
+            }
+
+
+            .shop-toolbar {
+                padding: 17px;
+                border-radius: 16px;
+            }
+
+
+            .toolbar-left h2 {
+                font-size: 21px;
+            }
+
+        }
+
+    </style>
+
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="index.html" class="logo">
+            SHOP<span>ORA</span>
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="products.html" class="active">
+                Shop
+            </a>
+
+            <a href="index.html#categories">
+                Categories
+            </a>
+
+            <a href="index.html#about">
+                About
+            </a>
+
+            <a href="index.html#contact">
+                Contact
+            </a>
+
+        </nav>
+
+
+        <div class="nav-actions">
+
+            <button
+                class="icon-btn"
+                onclick="toggleSearch()"
+                title="Search">
+                🔍
+            </button>
+            <a
+                href="login.html"
+                class="icon-btn"
+                title="Account">
+                👤
+            </a>
+            <a
+                href="cart.html"
+                class="cart-btn"
+                title="Cart">
+
+                🛒
+
+                <span id="cart-count">
+                    0
+                </span>
+
+            </a>
+            <button
+                class="menu-toggle"
+                onclick="toggleMenu()">
+                ☰
+            </button>
+
+        </div>
+
+    </div>
+    <!-- NAV SEARCH -->
+
+    <div id="search-box" class="search-box">
+
+        <input
+            type="text"
+            id="search-input"
+            placeholder="Search products..."
+            onkeyup="filterProducts()">
+
+    </div>
+
+</header>
+
+<!-- ================= SHOP HERO ================= -->
+
+<section class="shop-hero">
+
+    <div class="shop-hero-content">
+
+        <div class="shop-badge">
+            ✨ SHOPORA COLLECTION
+        </div>
+
+
+        <h1>
+            Find Something
+            <span>You’ll Love.</span>
+        </h1>
+
+
+        <p>
+            Explore our carefully selected collection of
+            electronics, fashion, beauty and home essentials.
+        </p>
+
+    </div>
+
+</section>
+<!-- ================= SHOP ================= -->
+
+<section class="section shop-section">
+
+
+    <!-- SEARCH -->
+
+    <div class="shop-search">
+
+        <span>🔍</span>
+
+        <input
+            type="text"
+            id="shop-search-input"
+            placeholder="Search for products..."
+            onkeyup="filterProducts()">
+
+    </div>
+
+
+
+    <!-- TOOLBAR -->
+
+    <div class="shop-toolbar">
+
+
+        <div class="toolbar-left">
+
+            <h2>
+                All Products
+            </h2>
+
+            <p id="product-count">
+                Explore our latest collection
+            </p>
+
+        </div>
+        <div class="shop-controls">
+
+
+            <select
+                id="category-filter"
+                onchange="filterProducts()">
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="electronics">
+                    Electronics
+                </option>
+
+                <option value="fashion">
+                    Fashion
+                </option>
+
+                <option value="beauty">
+                    Beauty
+                </option>
+
+                <option value="home">
+                    Home & Living
+                </option>
+
+            </select>
+            <select
+                id="sort-products"
+                onchange="sortProducts()">
+
+                <option value="default">
+                    Sort By
+                </option>
+
+                <option value="low">
+                    Price: Low to High
+                </option>
+
+                <option value="high">
+                    Price: High to Low
+                </option>
+
+                <option value="rating">
+                    Highest Rated
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+    <!-- PRODUCT GRID -->
+
+ <div 
+    id="all-products" 
+    class="product-grid">
+
+        <!-- Products generated by JavaScript -->
+
+    </div>
+    <!-- EMPTY STATE -->
+
+    <div
+        id="no-products"
+        class="no-products"
+        style="display:none;">
+
+        <div>
+            🔎
+        </div>
+
+        <h3>
+            No Products Found
+        </h3>
+
+        <p>
+            Try changing your search or category.
+        </p>
+
+    </div>
+
+</section>
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-container">
+        <div>
+
+            <a
+                href="index.html"
+                class="logo">
+                SHOP<span>ORA</span>
+            </a>
+
+            <p>
+                Modern shopping for modern lifestyles.
+            </p>
+
+        </div>
+
+        <div class="footer-links">
+
+            <h3>
+                Quick Links
+            </h3>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="products.html">
+                Shop
+            </a>
+
+            <a href="cart.html">
+                Cart
+            </a>
+
+            <a href="orders.html">
+                My Orders
+            </a>
+
+        </div>
+
+        <div class="footer-links">
+
+            <h3>
+                Account
+            </h3>
+
+            <a href="login.html">
+                Login
+            </a>
+
+            <a href="register.html">
+                Register
+            </a>
+
+            <a href="orders.html">
+                Track Orders
+            </a>
+
+        </div>
+        <div class="footer-links">
+
+            <h3>
+                Admin
+            </h3>
+
+            <a href="admin/admin-login.html">
+                Admin Panel
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        © 2026 SHOPORA. All Rights Reserved.
+
+    </div>
+
+</footer>
+
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="js/app.js"></script>
+
+<script src="js/products.js"></script>
+
+<script src="js/cart.js"></script>
+
+
+
+</body>
+
+</html>
