@@ -2,6 +2,10 @@
    SHOPORA - ORDERS
 ========================= */
 
+const ORDER_API_URL =
+    "https://supreme-goggles-r474rw7j7vx7cxrrg-3000.app.github.dev/api/orders";
+
+
 document.addEventListener("DOMContentLoaded", function () {
 
     loadOrders();
@@ -10,10 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 /* =========================
-   LOAD ORDERS
+   LOAD ORDERS FROM MONGODB
 ========================= */
 
-function loadOrders() {
+async function loadOrders() {
 
     const ordersContainer =
         document.getElementById("orders-container");
@@ -21,64 +25,155 @@ function loadOrders() {
     if (!ordersContainer) return;
 
 
-    /* Get saved orders */
+    /* Loading */
 
-    const orders =
-        JSON.parse(
-            localStorage.getItem("orders")
-        ) || [];
-
-
-    /* Update statistics */
-
-    updateOrderStats(orders);
+    ordersContainer.innerHTML = `
+        <div class="empty-orders">
+            <div class="empty-icon">⏳</div>
+            <h2>Loading Orders...</h2>
+            <p>Please wait while we load your orders.</p>
+        </div>
+    `;
 
 
-    /* No orders */
+    try {
 
-    if (orders.length === 0) {
+        const response =
+            await fetch(ORDER_API_URL);
+
+
+        const data =
+            await response.json();
+
+
+        console.log("Orders API Response:", data);
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message || "Failed to load orders."
+            );
+
+        }
+
+
+        const orders =
+            data.orders || [];
+
+
+        /* Update statistics */
+
+        updateOrderStats(orders);
+
+
+        /* No orders */
+
+        if (orders.length === 0) {
+
+            ordersContainer.innerHTML = `
+
+                <div class="empty-orders">
+
+                    <div class="empty-icon">
+                        🛍️
+                    </div>
+
+                    <h2>No Orders Yet</h2>
+
+                    <p>
+                        You haven't placed any orders yet.
+                        Start shopping and your orders will appear here.
+                    </p>
+
+                    <a
+                        href="products.html"
+                        class="shop-now"
+                    >
+                        Start Shopping
+                    </a>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* Update order count text */
+
+        const ordersCountText =
+            document.getElementById("orders-count-text");
+
+        if (ordersCountText) {
+
+            ordersCountText.textContent =
+                `${orders.length} order(s) found`;
+
+        }
+
+
+        /* Newest orders first */
+
+        const sortedOrders =
+            [...orders].sort(
+                function (a, b) {
+
+                    return new Date(b.createdAt) -
+                           new Date(a.createdAt);
+
+                }
+            );
+
+
+        /* Display orders */
+
+        ordersContainer.innerHTML =
+            sortedOrders.map(
+                function (order) {
+
+                    return createOrderCard(order);
+
+                }
+            ).join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "Load Orders Error:",
+            error
+        );
+
 
         ordersContainer.innerHTML = `
-        
+
             <div class="empty-orders">
 
                 <div class="empty-icon">
-                    🛍️
+                    ⚠️
                 </div>
 
-                <h2>No Orders Yet</h2>
+                <h2>Unable to Load Orders</h2>
 
                 <p>
-                    You haven't placed any orders yet.
-                    Start shopping and your orders will appear here.
+                    ${error.message}
                 </p>
 
-                <a href="products.html" class="shop-now">
-                    Start Shopping
-                </a>
+                <button
+                    onclick="loadOrders()"
+                    class="shop-now"
+                >
+                    Try Again
+                </button>
 
             </div>
-        
+
         `;
 
-        return;
     }
-
-
-    /* Show newest orders first */
-
-    const sortedOrders =
-        [...orders].reverse();
-
-
-    ordersContainer.innerHTML =
-        sortedOrders.map(
-            function (order) {
-
-                return createOrderCard(order);
-
-            }
-        ).join("");
 
 }
 
@@ -118,7 +213,11 @@ function updateOrderStats(orders) {
         orders.filter(
             function (order) {
 
-                return order.status !== "Delivered";
+                return (
+                    order.status === "Pending" ||
+                    order.status === "Processing" ||
+                    order.status === "Shipped"
+                );
 
             }
         ).length;
@@ -159,7 +258,7 @@ function updateOrderStats(orders) {
             function (total, order) {
 
                 return total +
-                    (Number(order.total) || 0);
+                    (Number(order.totalAmount) || 0);
 
             },
             0
@@ -169,7 +268,8 @@ function updateOrderStats(orders) {
     if (totalSpent) {
 
         totalSpent.textContent =
-            "Rs " + spent.toLocaleString();
+            "Rs " +
+            spent.toLocaleString();
 
     }
 
@@ -182,54 +282,76 @@ function updateOrderStats(orders) {
 
 function createOrderCard(order) {
 
-    const items =
-        order.items || [];
+    const products =
+        order.products || [];
 
 
     /* First product */
 
-    const firstItem =
-        items.length > 0
-            ? items[0]
+    const firstProduct =
+        products.length > 0
+            ? products[0]
             : null;
 
 
     const productName =
-        firstItem
-            ? firstItem.name
+        firstProduct
+            ? firstProduct.name
             : "Order Items";
 
 
     const quantity =
-        firstItem
-            ? (Number(firstItem.quantity) || 1)
-            : items.length;
+        firstProduct
+            ? (Number(firstProduct.quantity) || 1)
+            : products.length;
 
 
     const price =
-        firstItem
-            ? (Number(firstItem.price) || 0)
+        firstProduct
+            ? (Number(firstProduct.price) || 0)
             : 0;
 
 
-    /* More items text */
+    /* More items */
 
     const moreItems =
-        items.length > 1
-            ? `+ ${items.length - 1} more item(s)`
+        products.length > 1
+            ? `+ ${products.length - 1} more item(s)`
             : "";
 
 
     /* Status */
 
     const status =
-        order.status || "Order Placed";
+        order.status || "Pending";
 
 
     /* Progress */
 
     const progress =
         getOrderProgress(status);
+
+
+    /* Order ID */
+
+    const orderId =
+        order._id || "N/A";
+
+
+    /* Order date */
+
+    const orderDate =
+        order.createdAt
+            ? new Date(
+                order.createdAt
+            ).toLocaleString()
+            : "";
+
+
+    /* Total */
+
+    const total =
+        Number(order.totalAmount) || 0;
 
 
     return `
@@ -242,14 +364,16 @@ function createOrderCard(order) {
 
                 <div class="order-id">
 
-                    <small>ORDER ID</small>
+                    <small>
+                        ORDER ID
+                    </small>
 
                     <strong>
-                        ${order.orderId || "N/A"}
+                        #SHOPORA-${orderId.slice(-10)}
                     </strong>
 
                     <div class="order-date">
-                        ${order.date || ""}
+                        ${orderDate}
                     </div>
 
                 </div>
@@ -270,7 +394,16 @@ function createOrderCard(order) {
 
                 <div class="product-image">
 
-                    🛍️
+                    ${
+                        firstProduct &&
+                        firstProduct.image
+                            ? `<img
+                                src="${firstProduct.image}"
+                                alt="${productName}"
+                                style="width:100%;height:100%;object-fit:cover;border-radius:12px;"
+                              >`
+                            : "🛍️"
+                    }
 
                 </div>
 
@@ -285,16 +418,20 @@ function createOrderCard(order) {
                         Quantity: ${quantity}
                     </p>
 
-                    <p>
-                        ${moreItems}
-                    </p>
+                    ${
+                        moreItems
+                            ? `<p>${moreItems}</p>`
+                            : ""
+                    }
 
                 </div>
 
 
                 <div class="product-price">
 
-                    <span>Price</span>
+                    <span>
+                        Price
+                    </span>
 
                     <strong>
                         Rs ${price.toLocaleString()}
@@ -316,6 +453,9 @@ function createOrderCard(order) {
 
                 <div class="progress-line">
 
+
+                    <!-- PLACED -->
+
                     <div class="
                         progress-step
                         ${progress >= 1 ? "active" : ""}
@@ -332,12 +472,16 @@ function createOrderCard(order) {
                     </div>
 
 
+                    <!-- LINE -->
+
                     <div class="
                         progress-bar
                         ${progress >= 2 ? "active" : ""}
                     ">
                     </div>
 
+
+                    <!-- PROCESSING -->
 
                     <div class="
                         progress-step
@@ -355,12 +499,16 @@ function createOrderCard(order) {
                     </div>
 
 
+                    <!-- LINE -->
+
                     <div class="
                         progress-bar
                         ${progress >= 3 ? "active" : ""}
                     ">
                     </div>
 
+
+                    <!-- SHIPPED -->
 
                     <div class="
                         progress-step
@@ -378,12 +526,16 @@ function createOrderCard(order) {
                     </div>
 
 
+                    <!-- LINE -->
+
                     <div class="
                         progress-bar
                         ${progress >= 4 ? "active" : ""}
                     ">
                     </div>
 
+
+                    <!-- DELIVERED -->
 
                     <div class="
                         progress-step
@@ -416,7 +568,7 @@ function createOrderCard(order) {
                     </span>
 
                     <strong>
-                        Rs ${(Number(order.total) || 0).toLocaleString()}
+                        Rs ${total.toLocaleString()}
                     </strong>
 
                 </div>
@@ -425,7 +577,7 @@ function createOrderCard(order) {
                 <div class="order-buttons">
 
                     <a
-                        href="order-tracking.html?orderId=${encodeURIComponent(order.orderId || "")}"
+                        href="order-tracking.html?orderId=${encodeURIComponent(orderId)}"
                         class="order-btn track-btn"
                     >
                         Track Order
@@ -458,7 +610,7 @@ function getOrderProgress(status) {
 
     switch (status) {
 
-        case "Order Placed":
+        case "Pending":
             return 1;
 
         case "Processing":
@@ -469,6 +621,9 @@ function getOrderProgress(status) {
 
         case "Delivered":
             return 4;
+
+        case "Cancelled":
+            return 1;
 
         default:
             return 1;
