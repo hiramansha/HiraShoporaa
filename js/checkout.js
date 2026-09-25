@@ -1,4 +1,3 @@
-```js
 console.log("SHOPORA CHECKOUT JS UPDATED");
 
 // ==========================================
@@ -443,4 +442,3 @@ document.addEventListener(
 
     }
 );
-```
