@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -252,6 +253,7 @@
                 <!-- CHECKOUT BUTTON -->
 
                 <button
+                    type="button"
                     class="checkout-btn"
                     onclick="goToCheckout()">
 
@@ -335,6 +337,9 @@
 
 function goToCheckout() {
 
+    const cart =
+        JSON.parse(localStorage.getItem("cart")) || [];
+
     if (cart.length === 0) {
 
         alert("Your cart is empty!");
@@ -353,3 +358,4 @@ function goToCheckout() {
 </body>
 
 </html>
+```
