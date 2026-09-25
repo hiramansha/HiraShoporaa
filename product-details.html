@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Product Details | SHOPORA</title>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -433,10 +436,14 @@
                 width: 100%;
             }
         }
+
     </style>
+
 </head>
 
+
 <body>
+
 
     <!-- =========================
          HEADER
@@ -449,14 +456,27 @@
         </div>
 
         <nav>
-            <a href="index.html">Home</a>
-            <a href="products.html">Products</a>
-            <a href="orders.html">Orders</a>
 
-            <a href="cart.html" class="cart-link">
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="products.html">
+                Products
+            </a>
+
+            <a href="orders.html">
+                Orders
+            </a>
+
+            <a
+                href="cart.html"
+                class="cart-link"
+            >
                 🛒 Cart
                 <span id="cart-count">0</span>
             </a>
+
         </nav>
 
     </header>
@@ -469,19 +489,36 @@
     <main class="container">
 
         <div class="breadcrumb">
-            <a href="index.html">Home</a>
+
+            <a href="index.html">
+                Home
+            </a>
+
             &nbsp; / &nbsp;
-            <a href="products.html">Products</a>
+
+            <a href="products.html">
+                Products
+            </a>
+
             &nbsp; / &nbsp;
+
             Product Details
+
         </div>
 
 
         <div id="product-details">
 
             <div class="loading">
-                <h2>Loading Product...</h2>
-                <p>Please wait while we load the product.</p>
+
+                <h2>
+                    Loading Product...
+                </h2>
+
+                <p>
+                    Please wait while we load the product.
+                </p>
+
             </div>
 
         </div>
@@ -494,9 +531,11 @@
     ========================= -->
 
     <footer>
+
         <p>
             © 2026 SHOP<span>ORA</span>. All Rights Reserved.
         </p>
+
     </footer>
 
 
@@ -514,11 +553,11 @@
     <script>
 
         /* =========================
-           API URL
+           CURRENT BACKEND API
         ========================= */
 
         const API_URL =
-            "https://organic-space-dollop-pj7jg97x7pj5h6x94-3000.app.github.dev/api/products";
+            "https://supreme-goggles-r474rw7j7vx7cxrrg-3000.app.github.dev/api/products";
 
 
         /* =========================
@@ -527,11 +566,14 @@
 
         function getProductId() {
 
-            const params = new URLSearchParams(
-                window.location.search
-            );
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
 
-            return Number(params.get("id"));
+            return Number(
+                params.get("id")
+            );
         }
 
 
@@ -541,7 +583,10 @@
 
         function escapeHtml(value) {
 
-            if (value === null || value === undefined) {
+            if (
+                value === null ||
+                value === undefined
+            ) {
                 return "";
             }
 
@@ -560,19 +605,31 @@
 
         function createStars(rating) {
 
-            const roundedRating = Math.round(
-                Number(rating) || 0
-            );
+            const roundedRating =
+                Math.round(
+                    Number(rating) || 0
+                );
 
             let stars = "";
 
-            for (let i = 1; i <= 5; i++) {
+            for (
+                let i = 1;
+                i <= 5;
+                i++
+            ) {
 
-                if (i <= roundedRating) {
+                if (
+                    i <= roundedRating
+                ) {
+
                     stars += "★";
+
                 } else {
+
                     stars += "☆";
+
                 }
+
             }
 
             return stars;
@@ -586,19 +643,26 @@
         async function loadProduct() {
 
             const container =
-                document.getElementById("product-details");
+                document.getElementById(
+                    "product-details"
+                );
 
-            const productId = getProductId();
+            const productId =
+                getProductId();
 
 
-            /* Check ID */
-
-            if (!productId || productId < 1) {
+            if (
+                !productId ||
+                productId < 1
+            ) {
 
                 container.innerHTML = `
+
                     <div class="error-box">
 
-                        <h2>Product Not Found</h2>
+                        <h2>
+                            Product Not Found
+                        </h2>
 
                         <p>
                             No valid product was selected.
@@ -612,6 +676,7 @@
                         </a>
 
                     </div>
+
                 `;
 
                 return;
@@ -620,43 +685,52 @@
 
             try {
 
-                /* =========================
-                   FETCH FROM MONGODB API
-                ========================= */
+                const response =
+                    await fetch(API_URL);
 
-                const response = await fetch(API_URL);
 
                 if (!response.ok) {
-                    throw new Error(
-                        "API request failed"
-                    );
-                }
-
-                const data = await response.json();
-
-
-                if (!data.success || !Array.isArray(data.products)) {
 
                     throw new Error(
-                        "Invalid product data"
+                        "Product API request failed."
                     );
+
                 }
 
 
-                /* =========================
-                   FIND PRODUCT
-                   ========================= */
+                const data =
+                    await response.json();
+
+
+                if (
+                    !data.success ||
+                    !Array.isArray(
+                        data.products
+                    )
+                ) {
+
+                    throw new Error(
+                        "Invalid product data."
+                    );
+
+                }
+
 
                 const product =
-                    data.products[productId - 1];
+                    data.products[
+                        productId - 1
+                    ];
 
 
                 if (!product) {
 
                     container.innerHTML = `
+
                         <div class="error-box">
 
-                            <h2>Product Not Found</h2>
+                            <h2>
+                                Product Not Found
+                            </h2>
 
                             <p>
                                 The requested product does not exist.
@@ -670,6 +744,7 @@
                             </a>
 
                         </div>
+
                     `;
 
                     return;
@@ -681,10 +756,14 @@
                 ========================= */
 
                 const name =
-                    escapeHtml(product.name);
+                    escapeHtml(
+                        product.name
+                    );
 
                 const category =
-                    escapeHtml(product.category);
+                    escapeHtml(
+                        product.category
+                    );
 
                 const description =
                     escapeHtml(
@@ -693,42 +772,64 @@
                     );
 
                 const image =
-                    escapeHtml(product.image);
+                    escapeHtml(
+                        product.image
+                    );
 
                 const price =
-                    Number(product.price || 0);
+                    Number(
+                        product.price || 0
+                    );
 
                 const oldPrice =
-                    Number(product.oldPrice || 0);
+                    Number(
+                        product.oldPrice || 0
+                    );
 
                 const rating =
-                    Number(product.rating || 0);
+                    Number(
+                        product.rating || 0
+                    );
 
                 const stock =
-                    Number(product.stock || 0);
+                    Number(
+                        product.stock || 0
+                    );
 
 
                 /* =========================
-                   STOCK STATUS
+                   STOCK
                 ========================= */
 
                 let stockHTML = "";
 
+
                 if (stock > 0) {
 
                     stockHTML = `
+
                         <div class="stock">
-                            ✓ In Stock · ${stock} available
+
+                            ✓ In Stock ·
+                            ${stock}
+                            available
+
                         </div>
+
                     `;
 
                 } else {
 
                     stockHTML = `
+
                         <div class="stock out-stock">
+
                             ✕ Out of Stock
+
                         </div>
+
                     `;
+
                 }
 
 
@@ -738,13 +839,21 @@
 
                 let oldPriceHTML = "";
 
-                if (oldPrice > price) {
+
+                if (
+                    oldPrice > price
+                ) {
 
                     oldPriceHTML = `
+
                         <span class="old-price">
+
                             $${oldPrice.toFixed(2)}
+
                         </span>
+
                     `;
+
                 }
 
 
@@ -756,7 +865,8 @@
 
                     <div class="product-details">
 
-                        <!-- PRODUCT IMAGE -->
+
+                        <!-- IMAGE -->
 
                         <div class="product-image-box">
 
@@ -769,17 +879,22 @@
                         </div>
 
 
-                        <!-- PRODUCT INFORMATION -->
+                        <!-- INFO -->
 
                         <div class="product-info">
 
+
                             <div class="category">
+
                                 ${category}
+
                             </div>
 
 
                             <h1>
+
                                 ${name}
+
                             </h1>
 
 
@@ -788,7 +903,10 @@
                                 ${createStars(rating)}
 
                                 <span>
-                                    ${rating.toFixed(1)} Rating
+
+                                    ${rating.toFixed(1)}
+                                    Rating
+
                                 </span>
 
                             </div>
@@ -804,7 +922,9 @@
 
 
                             <p class="description">
+
                                 ${description}
+
                             </p>
 
 
@@ -819,6 +939,7 @@
                                     Quantity:
                                 </label>
 
+
                                 <div class="quantity-controls">
 
                                     <button
@@ -828,6 +949,7 @@
                                         −
                                     </button>
 
+
                                     <input
                                         type="number"
                                         id="quantity"
@@ -835,6 +957,7 @@
                                         min="1"
                                         max="${Math.max(stock, 1)}"
                                     >
+
 
                                     <button
                                         type="button"
@@ -852,24 +975,33 @@
 
                             <div class="buttons">
 
+
                                 <button
+                                    type="button"
                                     class="btn add-btn"
                                     onclick="addProductToCart(${productId})"
                                     ${stock <= 0 ? "disabled" : ""}
                                 >
+
                                     🛒 Add to Cart
+
                                 </button>
 
 
                                 <button
+                                    type="button"
                                     class="btn buy-btn"
                                     onclick="buyNow(${productId})"
                                     ${stock <= 0 ? "disabled" : ""}
                                 >
+
                                     ⚡ Buy Now
+
                                 </button>
 
+
                             </div>
+
 
                         </div>
 
@@ -883,6 +1015,7 @@
                     "Product Details Error:",
                     error
                 );
+
 
                 container.innerHTML = `
 
@@ -906,7 +1039,9 @@
                     </div>
 
                 `;
+
             }
+
         }
 
 
@@ -917,21 +1052,37 @@
         function increaseQuantity() {
 
             const quantityInput =
-                document.getElementById("quantity");
+                document.getElementById(
+                    "quantity"
+                );
+
 
             if (!quantityInput) {
                 return;
             }
 
+
             const current =
-                Number(quantityInput.value) || 1;
+                Number(
+                    quantityInput.value
+                ) || 1;
+
 
             const max =
-                Number(quantityInput.max) || 10;
+                Number(
+                    quantityInput.max
+                ) || 10;
 
-            if (current < max) {
-                quantityInput.value = current + 1;
+
+            if (
+                current < max
+            ) {
+
+                quantityInput.value =
+                    current + 1;
+
             }
+
         }
 
 
@@ -942,18 +1093,31 @@
         function decreaseQuantity() {
 
             const quantityInput =
-                document.getElementById("quantity");
+                document.getElementById(
+                    "quantity"
+                );
+
 
             if (!quantityInput) {
                 return;
             }
 
-            const current =
-                Number(quantityInput.value) || 1;
 
-            if (current > 1) {
-                quantityInput.value = current - 1;
+            const current =
+                Number(
+                    quantityInput.value
+                ) || 1;
+
+
+            if (
+                current > 1
+            ) {
+
+                quantityInput.value =
+                    current - 1;
+
             }
+
         }
 
 
@@ -961,13 +1125,23 @@
            ADD PRODUCT TO CART
         ========================= */
 
-        async function addProductToCart(productId) {
+        async function addProductToCart(
+            productId
+        ) {
 
             const quantityInput =
-                document.getElementById("quantity");
+                document.getElementById(
+                    "quantity"
+                );
+
 
             const quantity =
-                Number(quantityInput?.value) || 1;
+                Math.max(
+                    1,
+                    Number(
+                        quantityInput?.value
+                    ) || 1
+                );
 
 
             try {
@@ -975,51 +1149,135 @@
                 const response =
                     await fetch(API_URL);
 
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Product API request failed."
+                    );
+
+                }
+
+
                 const data =
                     await response.json();
 
 
-                if (!data.success) {
-                    alert("Unable to load product.");
+                if (
+                    !data.success ||
+                    !Array.isArray(
+                        data.products
+                    )
+                ) {
+
+                    alert(
+                        "Unable to load products."
+                    );
+
                     return;
+
                 }
 
 
                 const product =
-                    data.products[productId - 1];
+                    data.products[
+                        productId - 1
+                    ];
 
 
                 if (!product) {
-                    alert("Product not found.");
+
+                    alert(
+                        "Product not found."
+                    );
+
                     return;
+
                 }
 
 
-                if (Number(product.stock) <= 0) {
-                    alert("This product is out of stock.");
+                const stock =
+                    Number(
+                        product.stock || 0
+                    );
+
+
+                if (stock <= 0) {
+
+                    alert(
+                        "This product is out of stock."
+                    );
+
                     return;
+
+                }
+
+
+                if (
+                    quantity > stock
+                ) {
+
+                    alert(
+                        `Only ${stock} item(s) available.`
+                    );
+
+                    return;
+
                 }
 
 
                 /* =========================
-                   GET EXISTING CART
+                   GET CART
                 ========================= */
 
                 let cart =
                     JSON.parse(
-                        localStorage.getItem("cart")
+                        localStorage.getItem(
+                            "cart"
+                        )
                     ) || [];
 
 
+                /* =========================
+                   FIND EXISTING PRODUCT
+                ========================= */
+
                 const existingProduct =
                     cart.find(
-                        item => item.id === productId
+                        function (item) {
+
+                            return (
+                                Number(item.id) ===
+                                Number(productId)
+                            );
+
+                        }
                     );
 
 
                 if (existingProduct) {
 
-                    existingProduct.quantity += quantity;
+                    const newQuantity =
+                        Number(
+                            existingProduct.quantity
+                        ) + quantity;
+
+
+                    if (
+                        newQuantity > stock
+                    ) {
+
+                        alert(
+                            `Only ${stock} item(s) available.`
+                        );
+
+                        return;
+
+                    }
+
+
+                    existingProduct.quantity =
+                        newQuantity;
 
                 } else {
 
@@ -1027,21 +1285,33 @@
 
                         id: productId,
 
-                        mongoId: product._id,
+                        mongoId:
+                            product._id,
 
-                        name: product.name,
+                        name:
+                            product.name,
 
-                        price: product.price,
+                        price:
+                            Number(
+                                product.price
+                            ) || 0,
 
-                        oldPrice: product.oldPrice,
+                        oldPrice:
+                            Number(
+                                product.oldPrice
+                            ) || 0,
 
-                        image: product.image,
+                        image:
+                            product.image || "",
 
-                        category: product.category,
+                        category:
+                            product.category || "",
 
-                        quantity: quantity
+                        quantity:
+                            quantity
 
                     });
+
                 }
 
 
@@ -1062,6 +1332,7 @@
                     `${product.name} added to cart!`
                 );
 
+
             } catch (error) {
 
                 console.error(
@@ -1069,10 +1340,13 @@
                     error
                 );
 
+
                 alert(
                     "Unable to add product to cart."
                 );
+
             }
+
         }
 
 
@@ -1080,12 +1354,45 @@
            BUY NOW
         ========================= */
 
-        async function buyNow(productId) {
+        async function buyNow(
+            productId
+        ) {
 
-            await addProductToCart(productId);
+            const quantityInput =
+                document.getElementById(
+                    "quantity"
+                );
 
-            window.location.href =
-                "checkout.html";
+
+            const quantity =
+                Math.max(
+                    1,
+                    Number(
+                        quantityInput?.value
+                    ) || 1
+                );
+
+
+            await addProductToCart(
+                productId
+            );
+
+
+            /*
+                Small delay allows the
+                cart operation to finish.
+            */
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        "checkout.html";
+
+                },
+                300
+            );
+
         }
 
 
@@ -1097,26 +1404,44 @@
 
             const cart =
                 JSON.parse(
-                    localStorage.getItem("cart")
+                    localStorage.getItem(
+                        "cart"
+                    )
                 ) || [];
 
 
             const totalItems =
                 cart.reduce(
-                    (total, item) =>
-                        total + Number(item.quantity || 0),
+                    function (
+                        total,
+                        item
+                    ) {
+
+                        return (
+                            total +
+                            Number(
+                                item.quantity || 0
+                            )
+                        );
+
+                    },
                     0
                 );
 
 
             const cartCount =
-                document.getElementById("cart-count");
+                document.getElementById(
+                    "cart-count"
+                );
 
 
             if (cartCount) {
+
                 cartCount.textContent =
                     totalItems;
+
             }
+
         }
 
 
@@ -1138,4 +1463,5 @@
     </script>
 
 </body>
+
 </html>
