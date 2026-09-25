@@ -3,8 +3,19 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+
+// ==========================================
+// ROUTES
+// ==========================================
+
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+
+
+// ==========================================
+// EXPRESS APP
+// ==========================================
 
 const app = express();
 
@@ -14,6 +25,7 @@ const app = express();
 // ==========================================
 
 app.use(cors());
+
 app.use(express.json());
 
 
@@ -22,7 +34,10 @@ app.use(express.json());
 // ==========================================
 
 app.use("/api/auth", authRoutes);
+
 app.use("/api/products", productRoutes);
+
+app.use("/api/orders", orderRoutes);
 
 
 // ==========================================
@@ -32,8 +47,11 @@ app.use("/api/products", productRoutes);
 app.get("/", (req, res) => {
 
     res.json({
+
         success: true,
+
         message: "Shopora Backend is running!"
+
     });
 
 });
@@ -45,6 +63,7 @@ app.get("/", (req, res) => {
 
 mongoose
     .connect(process.env.MONGO_URI)
+
     .then(() => {
 
         console.log(
@@ -52,6 +71,7 @@ mongoose
         );
 
     })
+
     .catch((error) => {
 
         console.error(
@@ -63,7 +83,7 @@ mongoose
 
 
 // ==========================================
-// START SERVER
+// SERVER
 // ==========================================
 
 const PORT =
