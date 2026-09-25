@@ -1,24 +1,35 @@
-function placeOrder(event) {
+console.log("SHOPORA CHECKOUT JS UPDATED");
+
+// ==========================================
+// SHOPORA - CHECKOUT SYSTEM
+// ==========================================
+
+const ORDER_API_URL =
+    "https://supreme-goggles-r474rw7j7vx7cxrrg-3000.app.github.dev/api/orders";
+
+
+async function placeOrder(event) {
 
     if (event) {
         event.preventDefault();
     }
 
-    checkoutCart =
+    const checkoutCart =
         JSON.parse(localStorage.getItem("cart")) || [];
 
-    /* Check cart */
 
+    // Check cart
     if (checkoutCart.length === 0) {
 
-        alert("Your cart is empty. Please add products first.");
+        alert(
+            "Your cart is empty. Please add products first."
+        );
 
         return;
     }
 
 
-    /* Get form fields */
-
+    // Get form fields
     const nameInput =
         document.getElementById("name");
 
@@ -38,91 +49,65 @@ function placeOrder(event) {
         document.getElementById("paymentMethod");
 
 
-    /* Get values */
-
+    // Get values
     const name =
-        nameInput ? nameInput.value.trim() : "";
+        nameInput.value.trim();
 
     const email =
-        emailInput ? emailInput.value.trim() : "";
+        emailInput.value.trim();
 
     const phone =
-        phoneInput ? phoneInput.value.trim() : "";
+        phoneInput.value.trim();
 
     const address =
-        addressInput ? addressInput.value.trim() : "";
+        addressInput.value.trim();
 
     const city =
-        cityInput ? cityInput.value.trim() : "";
+        cityInput.value.trim();
 
     const paymentMethod =
-        paymentInput ? paymentInput.value : "";
+        paymentInput.value;
 
 
-    /* Validation */
-
+    // Validation
     if (!name) {
-
         alert("Please enter your name.");
-
         nameInput.focus();
-
         return;
     }
-
 
     if (!email) {
-
         alert("Please enter your email.");
-
         emailInput.focus();
-
         return;
     }
-
 
     if (!phone) {
-
         alert("Please enter your phone number.");
-
         phoneInput.focus();
-
         return;
     }
-
 
     if (!address) {
-
         alert("Please enter your complete address.");
-
         addressInput.focus();
-
         return;
     }
-
 
     if (!city) {
-
         alert("Please enter your city.");
-
         cityInput.focus();
-
         return;
     }
-
 
     if (!paymentMethod) {
-
         alert("Please select a payment method.");
-
         paymentInput.focus();
-
         return;
     }
 
 
-    /* Calculate subtotal */
-
+    // Calculate subtotal
     const subtotal =
         checkoutCart.reduce(
             function (total, item) {
@@ -140,119 +125,164 @@ function placeOrder(event) {
         );
 
 
-    /* Shipping */
-
+    // Shipping
     const shipping = 0;
-
-
-    /* Grand total */
 
     const total =
         subtotal + shipping;
 
 
-    /* Generate Order ID */
+    // Prepare products for MongoDB
+    const products =
+        checkoutCart.map(function (item) {
 
-    const orderId =
-        "SHOPORA-" + Date.now();
+            return {
+
+                productId:
+                    String(
+                        item.mongoId ||
+                        item.id ||
+                        ""
+                    ),
+
+                name:
+                    item.name || "Product",
+
+                price:
+                    Number(item.price) || 0,
+
+                quantity:
+                    Number(item.quantity) || 1,
+
+                image:
+                    item.image || ""
+
+            };
+
+        });
 
 
-    /* Create order */
+    // Shipping address
+    const shippingAddress =
+        address + ", " + city;
 
-    const order = {
 
-        orderId: orderId,
+    // Order data for backend
+    const orderData = {
 
-        customer: {
+        customerName:
+            name,
 
-            name: name,
+        customerEmail:
+            email,
 
-            email: email,
+        products:
+            products,
 
-            phone: phone,
+        totalAmount:
+            total,
 
-            address: address,
-
-            city: city
-
-        },
-
-        paymentMethod: paymentMethod,
-
-        items: checkoutCart,
-
-        subtotal: subtotal,
-
-        shipping: shipping,
-
-        total: total,
-
-        status: "Order Placed",
-
-        date: new Date().toLocaleString(),
-
-        createdAt: new Date().toISOString()
+        shippingAddress:
+            shippingAddress
 
     };
 
 
-    /* Get existing orders */
+    try {
 
-    const orders =
-        JSON.parse(
-            localStorage.getItem("orders")
-        ) || [];
+        // Send order to backend
+        const response =
+            await fetch(
+                ORDER_API_URL,
+                {
+                    method: "POST",
 
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-    /* Add new order */
-
-    orders.push(order);
-
-
-    /* Save orders */
-
-    localStorage.setItem(
-        "orders",
-        JSON.stringify(orders)
-    );
-
-
-    /* Save latest order */
-
-    localStorage.setItem(
-        "lastOrder",
-        JSON.stringify(order)
-    );
+                    body:
+                        JSON.stringify(orderData)
+                }
+            );
 
 
-    /* Clear cart */
-
-    localStorage.removeItem("cart");
-
-
-    /* Success message */
-
-    alert(
-        "Order placed successfully! 🎉\n\n" +
-        "Order ID: " + orderId
-    );
+        const data =
+            await response.json();
 
 
-    /* Go to tracking page */
+        if (!response.ok || !data.success) {
 
-    window.location.href =
-        "order-tracking.html";
+            alert(
+                data.message ||
+                "Failed to place order."
+            );
+
+            return;
+        }
+
+
+        // Save latest order locally
+        localStorage.setItem(
+            "lastOrder",
+            JSON.stringify(data.order)
+        );
+
+
+        // Clear cart
+        localStorage.removeItem("cart");
+
+
+        // Success
+        alert(
+            "Order placed successfully! 🎉"
+        );
+
+
+        // Go to tracking page
+        window.location.href =
+            "order-tracking.html";
+
+
+    } catch (error) {
+
+        console.error(
+            "Order API Error:",
+            error
+        );
+
+        alert(
+            "Unable to connect to the server. Please try again."
+        );
+    }
 }
 
+
+// Setup form
 function setupCheckoutForm() {
 
     const checkoutForm =
-        document.getElementById("checkoutForm");
+        document.getElementById(
+            "checkoutForm"
+        );
 
-    if (!checkoutForm) return;
+    if (!checkoutForm) {
+        return;
+    }
 
     checkoutForm.addEventListener(
         "submit",
         placeOrder
     );
 }
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        setupCheckoutForm();
+
+    }
+);
