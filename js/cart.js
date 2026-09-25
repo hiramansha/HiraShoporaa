@@ -1,55 +1,30 @@
 // ==========================================
-// SHOPORA - CART SYSTEM
+// SHOPORA CART SYSTEM
 // ==========================================
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 
 // ==========================================
-// ADD PRODUCT TO CART
+// GET CART FROM LOCAL STORAGE
 // ==========================================
 
-function addToCart(productId) {
+function getCart() {
 
-    const product = products.find(function(item) {
-        return Number(item.id) === Number(productId);
-    });
+    return JSON.parse(
+        localStorage.getItem("cart")
+    ) || [];
+}
 
-    if (!product) {
-        alert("Product not found!");
-        return;
-    }
 
-    cart = JSON.parse(localStorage.getItem("cart")) || [];
+// ==========================================
+// SAVE CART TO LOCAL STORAGE
+// ==========================================
 
-    const existingProduct = cart.find(function(item) {
-        return Number(item.id) === Number(productId);
-    });
-
-    if (existingProduct) {
-
-        existingProduct.quantity =
-            Number(existingProduct.quantity || 0) + 1;
-
-    } else {
-
-        cart.push({
-            id: product.id,
-            name: product.name,
-            price: Number(product.price),
-            image: product.image,
-            quantity: 1
-        });
-    }
+function saveCart(cart) {
 
     localStorage.setItem(
         "cart",
         JSON.stringify(cart)
     );
-
-    updateCartCount();
-
-    alert(product.name + " added to cart!");
 }
 
 
@@ -59,83 +34,21 @@ function addToCart(productId) {
 
 function updateCartCount() {
 
-    cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cart = getCart();
+
+    const totalItems = cart.reduce(
+        function (total, item) {
+            return total + Number(item.quantity || 0);
+        },
+        0
+    );
 
     const cartCount =
         document.getElementById("cart-count");
 
-    if (!cartCount) {
-        return;
+    if (cartCount) {
+        cartCount.textContent = totalItems;
     }
-
-    const totalItems = cart.reduce(function(total, item) {
-
-        return total + Number(item.quantity || 0);
-
-    }, 0);
-
-    cartCount.textContent = totalItems;
-}
-
-
-// ==========================================
-// REMOVE PRODUCT
-// ==========================================
-
-function removeFromCart(productId) {
-
-    cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    cart = cart.filter(function(item) {
-
-        return Number(item.id) !== Number(productId);
-
-    });
-
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
-    );
-
-    updateCartCount();
-    displayCart();
-}
-
-
-// ==========================================
-// CHANGE QUANTITY
-// ==========================================
-
-function changeQuantity(productId, change) {
-
-    cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    const product = cart.find(function(item) {
-
-        return Number(item.id) === Number(productId);
-
-    });
-
-    if (!product) {
-        return;
-    }
-
-    product.quantity =
-        Number(product.quantity || 0) + Number(change);
-
-    if (product.quantity <= 0) {
-
-        removeFromCart(productId);
-        return;
-    }
-
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
-    );
-
-    updateCartCount();
-    displayCart();
 }
 
 
@@ -145,34 +58,63 @@ function changeQuantity(productId, change) {
 
 function displayCart() {
 
+    const cart = getCart();
+
     const cartContainer =
         document.getElementById("cart-items");
 
+    const emptyCart =
+        document.getElementById("empty-cart");
+
+    const cartSummary =
+        document.getElementById("cart-summary");
+
+
+    // If cart container does not exist
     if (!cartContainer) {
         return;
     }
 
-    cart =
-        JSON.parse(localStorage.getItem("cart")) || [];
 
+    // Empty cart
     if (cart.length === 0) {
 
-        cartContainer.innerHTML = `
-            <div class="empty-cart">
-                <h3>Your cart is empty 🛒</h3>
-                <p>Add some products to your cart.</p>
+        cartContainer.innerHTML = "";
 
-                <a href="products.html">
-                    Continue Shopping
-                </a>
-            </div>
-        `;
+        if (emptyCart) {
+            emptyCart.style.display = "block";
+        }
 
-        updateCartSummary();
+        if (cartSummary) {
+            cartSummary.style.display = "none";
+        }
+
+        updateCartCount();
+
         return;
     }
 
-    cartContainer.innerHTML = cart.map(function(item) {
+
+    // Hide empty cart message
+    if (emptyCart) {
+        emptyCart.style.display = "none";
+    }
+
+
+    // Show summary
+    if (cartSummary) {
+        cartSummary.style.display = "block";
+    }
+
+
+    cartContainer.innerHTML = "";
+
+
+    // ==========================================
+    // CREATE CART ITEMS
+    // ==========================================
+
+    cart.forEach(function (item, index) {
 
         const quantity =
             Number(item.quantity) || 1;
@@ -180,123 +122,312 @@ function displayCart() {
         const price =
             Number(item.price) || 0;
 
-        const itemTotal =
+        const total =
             price * quantity;
 
-        return `
-            <div class="cart-item">
+
+        const image =
+            item.image ||
+            "https://via.placeholder.com/150?text=SHOPORA";
+
+
+        const cartItem =
+            document.createElement("div");
+
+        cartItem.className = "cart-item";
+
+
+        cartItem.innerHTML = `
+
+            <div class="cart-product">
 
                 <img
-                    src="${item.image || ""}"
-                    alt="${item.name || "Product"}"
+                    src="${escapeCartHtml(image)}"
+                    alt="${escapeCartHtml(item.name)}"
+                    onerror="this.src='https://via.placeholder.com/150?text=SHOPORA';"
                 >
 
-                <div class="cart-item-info">
+                <div class="cart-product-info">
 
                     <h3>
-                        ${item.name || "Product"}
+                        ${escapeCartHtml(item.name)}
                     </h3>
 
                     <p>
-                        Price:
-                        Rs. ${price.toLocaleString()}
+                        ${escapeCartHtml(item.category || "Product")}
                     </p>
 
-                    <div class="quantity-controls">
-
-                        <button
-                            type="button"
-                            onclick="changeQuantity(${item.id}, -1)"
-                        >
-                            −
-                        </button>
-
-                        <span>
-                            ${quantity}
-                        </span>
-
-                        <button
-                            type="button"
-                            onclick="changeQuantity(${item.id}, 1)"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                    <p>
-                        Item Total:
-                        <strong>
-                            Rs. ${itemTotal.toLocaleString()}
-                        </strong>
-                    </p>
-
-                    <button
-                        type="button"
-                        class="remove-btn"
-                        onclick="removeFromCart(${item.id})"
-                    >
-                        Remove
-                    </button>
+                    <strong>
+                        $${price.toFixed(2)}
+                    </strong>
 
                 </div>
 
             </div>
+
+
+            <div class="cart-quantity">
+
+                <button
+                    type="button"
+                    onclick="decreaseCartQuantity(${index})"
+                >
+                    −
+                </button>
+
+                <span>
+                    ${quantity}
+                </span>
+
+                <button
+                    type="button"
+                    onclick="increaseCartQuantity(${index})"
+                >
+                    +
+                </button>
+
+            </div>
+
+
+            <div class="cart-total">
+
+                <strong>
+                    $${total.toFixed(2)}
+                </strong>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="remove-btn"
+                onclick="removeFromCart(${index})"
+            >
+                🗑️
+            </button>
+
         `;
 
-    }).join("");
+
+        cartContainer.appendChild(cartItem);
+
+    });
+
 
     updateCartSummary();
+
+    updateCartCount();
 }
 
 
 // ==========================================
-// CART SUMMARY
+// INCREASE CART QUANTITY
+// ==========================================
+
+function increaseCartQuantity(index) {
+
+    const cart = getCart();
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity =
+        Number(cart[index].quantity || 1) + 1;
+
+
+    saveCart(cart);
+
+    displayCart();
+}
+
+
+// ==========================================
+// DECREASE CART QUANTITY
+// ==========================================
+
+function decreaseCartQuantity(index) {
+
+    const cart = getCart();
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    const currentQuantity =
+        Number(cart[index].quantity || 1);
+
+
+    if (currentQuantity > 1) {
+
+        cart[index].quantity =
+            currentQuantity - 1;
+
+    } else {
+
+        cart.splice(index, 1);
+
+    }
+
+
+    saveCart(cart);
+
+    displayCart();
+}
+
+
+// ==========================================
+// REMOVE PRODUCT
+// ==========================================
+
+function removeFromCart(index) {
+
+    const cart = getCart();
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart.splice(index, 1);
+
+    saveCart(cart);
+
+    displayCart();
+
+}
+
+
+// ==========================================
+// UPDATE CART SUMMARY
 // ==========================================
 
 function updateCartSummary() {
 
-    cart =
-        JSON.parse(localStorage.getItem("cart")) || [];
+    const cart = getCart();
 
-    const totalItemsElement =
-        document.getElementById("cart-total-items");
+
+    const subtotal = cart.reduce(
+        function (total, item) {
+
+            return total +
+                (
+                    Number(item.price || 0) *
+                    Number(item.quantity || 0)
+                );
+
+        },
+        0
+    );
+
+
+    const shipping =
+        subtotal > 0 ? 5 : 0;
+
+
+    const grandTotal =
+        subtotal + shipping;
+
 
     const subtotalElement =
-        document.getElementById("cart-subtotal");
+        document.getElementById("subtotal");
+
+
+    const shippingElement =
+        document.getElementById("shipping");
+
 
     const totalElement =
-        document.getElementById("cart-total");
+        document.getElementById("total");
 
-    const totalItems = cart.reduce(function(total, item) {
-
-        return total + Number(item.quantity || 0);
-
-    }, 0);
-
-    const subtotal = cart.reduce(function(total, item) {
-
-        return total +
-            (
-                Number(item.price || 0) *
-                Number(item.quantity || 0)
-            );
-
-    }, 0);
-
-    if (totalItemsElement) {
-        totalItemsElement.textContent = totalItems;
-    }
 
     if (subtotalElement) {
+
         subtotalElement.textContent =
-            "Rs. " + subtotal.toLocaleString();
+            "$" + subtotal.toFixed(2);
+
     }
 
-    if (totalElement) {
-        totalElement.textContent =
-            "Rs. " + subtotal.toLocaleString();
+
+    if (shippingElement) {
+
+        shippingElement.textContent =
+            "$" + shipping.toFixed(2);
+
     }
+
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            "$" + grandTotal.toFixed(2);
+
+    }
+}
+
+
+// ==========================================
+// CLEAR CART
+// ==========================================
+
+function clearCart() {
+
+    localStorage.removeItem("cart");
+
+    displayCart();
+
+    updateCartCount();
+}
+
+
+// ==========================================
+// CHECKOUT
+// ==========================================
+
+function goToCheckout() {
+
+    const cart = getCart();
+
+
+    if (cart.length === 0) {
+
+        alert(
+            "Your cart is empty!"
+        );
+
+        return;
+    }
+
+
+    window.location.href =
+        "checkout.html";
+}
+
+
+// ==========================================
+// ESCAPE HTML
+// ==========================================
+
+function escapeCartHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
@@ -304,9 +435,13 @@ function updateCartSummary() {
 // PAGE LOAD
 // ==========================================
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    updateCartCount();
-    displayCart();
+        updateCartCount();
 
-});
+        displayCart();
+
+    }
+);

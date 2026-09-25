@@ -37,7 +37,8 @@ router.post("/", async (req, res) => {
 
             return res.status(400).json({
                 success: false,
-                message: "Customer information, products, total amount and shipping address are required."
+                message:
+                    "Customer information, products, total amount and shipping address are required."
             });
 
         }
@@ -202,5 +203,126 @@ router.get("/:id", async (req, res) => {
 
 });
 
+
+// ==========================================
+// UPDATE ORDER STATUS
+// ==========================================
+
+router.put("/:id/status", async (req, res) => {
+
+    try {
+
+        const { status } = req.body;
+
+
+        // ==========================================
+        // ALLOWED STATUSES
+        // ==========================================
+
+        const allowedStatuses = [
+            "Pending",
+            "Processing",
+            "Shipped",
+            "Delivered",
+            "Cancelled"
+        ];
+
+
+        // ==========================================
+        // STATUS VALIDATION
+        // ==========================================
+
+        if (!allowedStatuses.includes(status)) {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message: "Invalid order status."
+
+            });
+
+        }
+
+
+        // ==========================================
+        // UPDATE ORDER IN MONGODB
+        // ==========================================
+
+        const order =
+            await Order.findByIdAndUpdate(
+
+                req.params.id,
+
+                {
+                    status: status
+                },
+
+                {
+                    new: true,
+                    runValidators: true
+                }
+
+            );
+
+
+        // ==========================================
+        // ORDER NOT FOUND
+        // ==========================================
+
+        if (!order) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message: "Order not found."
+
+            });
+
+        }
+
+
+        // ==========================================
+        // SUCCESS RESPONSE
+        // ==========================================
+
+        res.json({
+
+            success: true,
+
+            message:
+                "Order status updated successfully!",
+
+            order: order
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Update Order Status Error:",
+            error.message
+        );
+
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                "Failed to update order status."
+
+        });
+
+    }
+
+});
+
+
+// ==========================================
+// EXPORT ROUTER
+// ==========================================
 
 module.exports = router;
