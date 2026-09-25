@@ -3,7 +3,7 @@
 // ==========================================
 
 const ORDER_API_URL =
-    "https://supreme-goggles-r474rw7j7vx7cxrrg-3000.app.github.dev/api/orders";
+    "https://cloudflare-backend.23-st-028.workers.dev/api/orders";
 
 // ==========================================
 // PAGE LOAD
