@@ -1,144 +1,315 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Checkout | SHOPORA</title>
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/checkout.css">
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/checkout.css"
+  >
+
 </head>
+
+
 <body>
 
-  <!-- Header -->
+
+  <!-- ==========================================
+       HEADER
+  =========================================== -->
+
   <header class="header">
+
     <div class="logo">
-      <a href="index.html">SHOPORA</a>
+      <a href="index.html">
+        SHOPORA
+      </a>
     </div>
 
+
     <nav>
-      <a href="index.html">Home</a>
-      <a href="products.html">Products</a>
-      <a href="cart.html">Cart</a>
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="products.html">
+        Products
+      </a>
+
+      <a href="cart.html">
+        Cart
+      </a>
+
     </nav>
+
   </header>
 
-  <!-- Checkout -->
+
+
+  <!-- ==========================================
+       CHECKOUT
+  =========================================== -->
+
   <main class="checkout-container">
 
-    <h1>Checkout</h1>
+    <h1>
+      Checkout
+    </h1>
+
 
     <div class="checkout-layout">
 
-      <!-- Customer Information -->
+
+      <!-- ======================================
+           CUSTOMER INFORMATION
+      ======================================= -->
+
       <section class="checkout-form-section">
 
-        <h2>Shipping Information</h2>
+        <h2>
+          Shipping Information
+        </h2>
+
 
         <form id="checkoutForm">
 
+
+          <!-- Full Name -->
+
           <div class="form-group">
-            <label for="name">Full Name</label>
+
+            <label for="name">
+              Full Name
+            </label>
+
             <input
               type="text"
               id="name"
               placeholder="Enter your full name"
               required
             >
+
           </div>
 
+
+
+          <!-- Email -->
+
           <div class="form-group">
-            <label for="email">Email Address</label>
+
+            <label for="email">
+              Email Address
+            </label>
+
             <input
               type="email"
               id="email"
               placeholder="Enter your email"
               required
             >
+
           </div>
 
+
+
+          <!-- Phone -->
+
           <div class="form-group">
-            <label for="phone">Phone Number</label>
+
+            <label for="phone">
+              Phone Number
+            </label>
+
             <input
               type="tel"
               id="phone"
               placeholder="Enter your phone number"
               required
             >
+
           </div>
 
+
+
+          <!-- Address -->
+
           <div class="form-group">
-            <label for="address">Complete Address</label>
+
+            <label for="address">
+              Complete Address
+            </label>
+
             <textarea
               id="address"
               placeholder="House no, street, area..."
               required
             ></textarea>
+
           </div>
 
+
+
+          <!-- City -->
+
           <div class="form-group">
-            <label for="city">City</label>
+
+            <label for="city">
+              City
+            </label>
+
             <input
               type="text"
               id="city"
               placeholder="Enter your city"
               required
             >
+
           </div>
+
+
+
+          <!-- Payment Method -->
 
           <div class="form-group">
-            <label for="paymentMethod">Payment Method</label>
 
-            <select id="paymentMethod" required>
-              <option value="">Select Payment Method</option>
-              <option value="Cash on Delivery">Cash on Delivery</option>
-              <option value="Bank Transfer">Bank Transfer</option>
+            <label for="paymentMethod">
+              Payment Method
+            </label>
+
+
+            <select
+              id="paymentMethod"
+              required
+            >
+
+              <option value="">
+                Select Payment Method
+              </option>
+
+              <option value="Cash on Delivery">
+                Cash on Delivery
+              </option>
+
+              <option value="Bank Transfer">
+                Bank Transfer
+              </option>
+
             </select>
+
           </div>
 
-         <button
-    type="button"
-    class="place-order-btn"
-    onclick="placeOrder(event)"
->
-    Place Order
-</button>
+
+
+          <!-- ==================================
+               PLACE ORDER BUTTON
+          =================================== -->
+
+          <button
+            type="submit"
+            class="place-order-btn"
+          >
+            Place Order
+          </button>
+
 
         </form>
 
       </section>
 
-      <!-- Order Summary -->
+
+
+      <!-- ======================================
+           ORDER SUMMARY
+      ======================================= -->
+
       <section class="order-summary-section">
 
-        <h2>Order Summary</h2>
+        <h2>
+          Order Summary
+        </h2>
+
 
         <div id="checkoutItems"></div>
 
-        <div class="summary-row">
-          <span>Subtotal</span>
-          <span id="checkoutSubtotal">Rs. 0</span>
-        </div>
 
         <div class="summary-row">
-          <span>Shipping</span>
-          <span id="checkoutShipping">Rs. 200</span>
+
+          <span>
+            Subtotal
+          </span>
+
+          <span id="checkoutSubtotal">
+            Rs. 0
+          </span>
+
         </div>
+
+
+
+        <div class="summary-row">
+
+          <span>
+            Shipping
+          </span>
+
+          <span id="checkoutShipping">
+            Rs. 200
+          </span>
+
+        </div>
+
+
 
         <div class="summary-total">
-          <span>Total</span>
-          <span id="checkoutTotal">Rs. 0</span>
+
+          <span>
+            Total
+          </span>
+
+          <span id="checkoutTotal">
+            Rs. 0
+          </span>
+
         </div>
 
+
       </section>
+
 
     </div>
 
   </main>
-<script src="js/storage.js"></script>
-<script src="js/products.js"></script>
-<script src="js/checkout.js"></script>
+
+
+
+  <!-- ==========================================
+       JAVASCRIPT
+  =========================================== -->
+
+  <script src="js/storage.js"></script>
+
+  <script src="js/products.js"></script>
+
+  <script src="js/checkout.js"></script>
+
 
 </body>
+
 </html>
+```
