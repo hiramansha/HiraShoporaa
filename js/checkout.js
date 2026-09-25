@@ -1,12 +1,18 @@
+```js
 console.log("SHOPORA CHECKOUT JS UPDATED");
 
 // ==========================================
 // SHOPORA - CHECKOUT SYSTEM
+// MongoDB Connected Version
 // ==========================================
 
 const ORDER_API_URL =
     "https://supreme-goggles-r474rw7j7vx7cxrrg-3000.app.github.dev/api/orders";
 
+
+// ==========================================
+// PLACE ORDER
+// ==========================================
 
 async function placeOrder(event) {
 
@@ -14,11 +20,15 @@ async function placeOrder(event) {
         event.preventDefault();
     }
 
+    // Get cart
     const checkoutCart =
         JSON.parse(localStorage.getItem("cart")) || [];
 
 
-    // Check cart
+    // ==========================================
+    // CHECK CART
+    // ==========================================
+
     if (checkoutCart.length === 0) {
 
         alert(
@@ -29,7 +39,10 @@ async function placeOrder(event) {
     }
 
 
-    // Get form fields
+    // ==========================================
+    // GET FORM FIELDS
+    // ==========================================
+
     const nameInput =
         document.getElementById("name");
 
@@ -49,7 +62,10 @@ async function placeOrder(event) {
         document.getElementById("paymentMethod");
 
 
-    // Get values
+    // ==========================================
+    // GET VALUES
+    // ==========================================
+
     const name =
         nameInput.value.trim();
 
@@ -69,45 +85,78 @@ async function placeOrder(event) {
         paymentInput.value;
 
 
-    // Validation
+    // ==========================================
+    // VALIDATION
+    // ==========================================
+
     if (!name) {
+
         alert("Please enter your name.");
+
         nameInput.focus();
+
         return;
     }
+
 
     if (!email) {
+
         alert("Please enter your email.");
+
         emailInput.focus();
+
         return;
     }
+
 
     if (!phone) {
+
         alert("Please enter your phone number.");
+
         phoneInput.focus();
+
         return;
     }
+
 
     if (!address) {
-        alert("Please enter your complete address.");
+
+        alert(
+            "Please enter your complete address."
+        );
+
         addressInput.focus();
+
         return;
     }
+
 
     if (!city) {
+
         alert("Please enter your city.");
+
         cityInput.focus();
+
         return;
     }
+
 
     if (!paymentMethod) {
-        alert("Please select a payment method.");
+
+        alert(
+            "Please select a payment method."
+        );
+
         paymentInput.focus();
+
         return;
     }
 
 
-    // Calculate subtotal
+    // ==========================================
+    // CALCULATE SUBTOTAL
+    // ==========================================
+
     const subtotal =
         checkoutCart.reduce(
             function (total, item) {
@@ -125,14 +174,25 @@ async function placeOrder(event) {
         );
 
 
-    // Shipping
+    // ==========================================
+    // SHIPPING
+    // ==========================================
+
     const shipping = 0;
+
+
+    // ==========================================
+    // TOTAL
+    // ==========================================
 
     const total =
         subtotal + shipping;
 
 
-    // Prepare products for MongoDB
+    // ==========================================
+    // PREPARE PRODUCTS
+    // ==========================================
+
     const products =
         checkoutCart.map(function (item) {
 
@@ -146,7 +206,8 @@ async function placeOrder(event) {
                     ),
 
                 name:
-                    item.name || "Product",
+                    item.name ||
+                    "Product",
 
                 price:
                     Number(item.price) || 0,
@@ -162,12 +223,18 @@ async function placeOrder(event) {
         });
 
 
-    // Shipping address
+    // ==========================================
+    // SHIPPING ADDRESS
+    // ==========================================
+
     const shippingAddress =
         address + ", " + city;
 
 
-    // Order data for backend
+    // ==========================================
+    // ORDER DATA
+    // ==========================================
+
     const orderData = {
 
         customerName:
@@ -188,9 +255,18 @@ async function placeOrder(event) {
     };
 
 
+    console.log(
+        "Sending Order:",
+        orderData
+    );
+
+
+    // ==========================================
+    // SEND ORDER TO MONGODB BACKEND
+    // ==========================================
+
     try {
 
-        // Send order to backend
         const response =
             await fetch(
                 ORDER_API_URL,
@@ -212,7 +288,21 @@ async function placeOrder(event) {
             await response.json();
 
 
-        if (!response.ok || !data.success) {
+        console.log(
+            "Backend Response:",
+            data
+        );
+
+
+        // ==========================================
+        // CHECK RESPONSE
+        // ==========================================
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !data.order
+        ) {
 
             alert(
                 data.message ||
@@ -223,29 +313,83 @@ async function placeOrder(event) {
         }
 
 
-        // Save latest order locally
+        // ==========================================
+        // SAVE ACTUAL MONGODB ORDER
+        // ==========================================
+
+        const savedOrder = {
+
+            _id:
+                data.order._id,
+
+            customerName:
+                data.order.customerName,
+
+            customerEmail:
+                data.order.customerEmail,
+
+            products:
+                data.order.products,
+
+            totalAmount:
+                data.order.totalAmount,
+
+            status:
+                data.order.status,
+
+            shippingAddress:
+                data.order.shippingAddress,
+
+            createdAt:
+                data.order.createdAt
+
+        };
+
+
+        // Save latest order
         localStorage.setItem(
             "lastOrder",
-            JSON.stringify(data.order)
+            JSON.stringify(savedOrder)
         );
 
 
-        // Clear cart
+        console.log(
+            "Saved Order:",
+            savedOrder
+        );
+
+
+        // ==========================================
+        // CLEAR CART
+        // ==========================================
+
         localStorage.removeItem("cart");
 
 
-        // Success
+        // ==========================================
+        // SUCCESS MESSAGE
+        // ==========================================
+
         alert(
             "Order placed successfully! 🎉"
         );
 
 
-        // Go to tracking page
+        // ==========================================
+        // GO TO TRACKING PAGE
+        // ==========================================
+
         window.location.href =
             "order-tracking.html";
 
+    }
 
-    } catch (error) {
+
+    // ==========================================
+    // ERROR HANDLING
+    // ==========================================
+
+    catch (error) {
 
         console.error(
             "Order API Error:",
@@ -255,11 +399,16 @@ async function placeOrder(event) {
         alert(
             "Unable to connect to the server. Please try again."
         );
+
     }
+
 }
 
 
-// Setup form
+// ==========================================
+// SETUP CHECKOUT FORM
+// ==========================================
+
 function setupCheckoutForm() {
 
     const checkoutForm =
@@ -267,16 +416,24 @@ function setupCheckoutForm() {
             "checkoutForm"
         );
 
+
     if (!checkoutForm) {
+
         return;
     }
+
 
     checkoutForm.addEventListener(
         "submit",
         placeOrder
     );
+
 }
 
+
+// ==========================================
+// PAGE LOAD
+// ==========================================
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -286,3 +443,4 @@ document.addEventListener(
 
     }
 );
+```
